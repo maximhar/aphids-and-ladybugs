@@ -64,6 +64,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="Configuration.h" />
+    <ClInclude Include="Creature.h" />
+    <ClInclude Include="Manager.h" />
+    <ClInclude Include="Printer.h" />
+    <ClInclude Include="SquarePrinter.h" />
+    <ClInclude Include="SquareWorld.h" />
+    <ClInclude Include="World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Run.cpp" />
+    <ClCompile Include="SquareCell.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
