@@ -27,7 +27,7 @@ public:
 
 	SquareCell()
 	{
-		memset(neighbours, NULL, sizeof(Cell *) * (last + 1));
+		memset(neighbours, (int)Cell::EDGE, sizeof(Cell *) * (last + 1));
 	}
 
 	virtual int firstNeighbour()

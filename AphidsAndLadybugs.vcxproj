@@ -64,19 +64,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Aphid.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="CreatureCounter.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Ladybug.h" />
+    <ClInclude Include="Loader.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Printer.h" />
+    <ClInclude Include="SquareLoader.h" />
     <ClInclude Include="SquarePrinter.h" />
     <ClInclude Include="SquareWorld.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Aphid.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Ladybug.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Run.cpp" />
     <ClCompile Include="SquareCell.h" />
+    <ClCompile Include="SquareLoader.cpp" />
+    <ClCompile Include="SquarePrinter.cpp" />
+    <ClCompile Include="SquareWorld.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,20 +3,27 @@
 #include <iostream>
 #include <map>
 #include <utility>
+#include <fstream>
+#include <iostream>
 #include "Creature.h"
 #include "World.h"
 #include "SquareWorld.h"
 #include "SquareCell.h"
+#include "SquareLoader.h"
+
 class Manager
 {
 private:
 	std::multimap<Cell *, Creature *> * creatures;
 	World * world;
 public:
-	Manager() : world(new SquareWorld(10, 8)), creatures(new std::multimap<Cell *, Creature *>())
+	Manager()
 	{
-		creatures->insert(std::make_pair(&world->getOrigin(), new Creature()));
-		creatures->insert(std::make_pair(world->getOrigin().getNeighbour(SquareCell::BOTTOM), new Creature()));
+		SquareLoader * load = new SquareLoader();
+		std::ifstream config;
+		config.open("manager.txt");
+		if (!config.is_open()) std::cout << "File is not open...";
+		else load->load(&creatures, &world, config);
 	}
 
 	void run()

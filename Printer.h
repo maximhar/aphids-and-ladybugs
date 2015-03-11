@@ -4,7 +4,6 @@
 #include <map>
 #include <ostream>
 #include "Creature.h"
-#include "World.h"
 
 class Printer
 {

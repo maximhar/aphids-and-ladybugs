@@ -1,6 +1,7 @@
 #pragma once
 
-#include <exception>
+#include <vector>
+#include "Creature.h"
 
 class Cell
 {
@@ -11,4 +12,5 @@ public:
 	virtual Cell * getNeighbour(int index) = 0;
 	virtual int firstNeighbour() = 0;
 	virtual int lastNeighbour() = 0;
+	static const Cell * EDGE;
 };
