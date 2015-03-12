@@ -24,6 +24,18 @@ void SquareWorld::initialiseGrid(int width, int height)
 			{
 				setCellNeighbour(tmp, &cellAt(to2D(col - 1, row)), SquareCell::LEFT);
 				setCellNeighbour(&cellAt(to2D(col - 1, row)), tmp, SquareCell::RIGHT);
+
+				if (row > 0)
+				{
+					setCellNeighbour(tmp, &cellAt(to2D(col - 1, row - 1)), SquareCell::TOP_LEFT);
+					setCellNeighbour(&cellAt(to2D(col - 1, row - 1)), tmp, SquareCell::BOTTOM_RIGHT);
+				}
+				
+				if (row < (height - 1))
+				{
+					setCellNeighbour(tmp, &cellAt(to2D(col - 1, row + 1)), SquareCell::BOTTOM_LEFT);
+					setCellNeighbour(&cellAt(to2D(col - 1, row + 1)), tmp, SquareCell::TOP_RIGHT);
+				}
 			}
 			cellSet(to2D(col, row), tmp);
 		}

@@ -1,8 +1,15 @@
-﻿Build started 11/03/2015 03:47:53.
-     1>Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" on node 2 (Build target(s)).
+﻿Build started 12/03/2015 05:32:40.
+     1>Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp Ladybug.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp Cell.cpp Ladybug.cpp Manager.cpp Run.cpp SquareCell.h SquareLoader.cpp SquarePrinter.cpp SquareWorld.cpp
+         SquareWorld.cpp
+         SquarePrinter.cpp
+         SquareLoader.cpp
+         SquareCell.h
+         Run.cpp
+         Manager.cpp
          Ladybug.cpp
+         Cell.cpp
          Aphid.cpp
          Generating Code...
        Link:
@@ -16,8 +23,8 @@
          Debug\SquarePrinter.obj
          Debug\SquareWorld.obj
          AphidsAndLadybugs.vcxproj -> C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\Debug\AphidsAndLadybugs.exe
-     1>Done Building Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.33
+Time Elapsed 00:00:01.95

@@ -9,8 +9,8 @@ class SquareCell : public Cell
 
 private:
 
-	Cell * neighbours[4];
-	const int first = 0, last = 3;
+	Cell * neighbours[8];
+	const int first = 0, last = 7;
 
 protected:
 
@@ -49,7 +49,11 @@ public:
 	}
 
 	static const int LEFT = 0;
-	static const int TOP = 1;
-	static const int RIGHT = 2;
-	static const int BOTTOM = 3;
+	static const int TOP_LEFT = 1;
+	static const int TOP = 2;
+	static const int TOP_RIGHT = 3;
+	static const int RIGHT = 4;
+	static const int BOTTOM_RIGHT = 5;
+	static const int BOTTOM = 6;
+	static const int BOTTOM_LEFT = 7;
 };
