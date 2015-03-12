@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ActionHandler.h" />
     <ClInclude Include="Aphid.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CreatureCounter.h" />

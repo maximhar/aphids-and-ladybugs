@@ -5,7 +5,7 @@
 #include "Ladybug.h"
 #include <istream>
 
-void SquareLoader::place(std::multimap<Cell *, Creature *> * map, SquareWorld * world, Creature * creature, int col, int row)
+void SquareLoader::place(std::map<Cell *, std::vector<Creature *>> * map, SquareWorld * world, Creature * creature, int col, int row)
 {
 	if (col > world->getWidth() || row > world->getHeight() || col < 0 || row < 0) throw "Coordinates out of world space.";
 
@@ -20,14 +20,14 @@ void SquareLoader::place(std::multimap<Cell *, Creature *> * map, SquareWorld * 
 		c = c->getNeighbour(SquareCell::BOTTOM);
 	}
 
-	map->insert(std::make_pair(c, creature));
+	map->insert(std::make_pair(c, std::vector<Creature *>())).first->second.push_back(creature);
 }
 
-bool SquareLoader::load(std::multimap<Cell *, Creature *> ** map, World ** world, std::istream & is)
+bool SquareLoader::load(std::map<Cell *, std::vector<Creature *>> ** map, World ** world, std::istream & is)
 {
 	int width, height;
 	is >> width >> height;
-	*map = new std::multimap<Cell *, Creature *>();
+	*map = new std::map<Cell *, std::vector<Creature *>>();
 	*world = new SquareWorld(width, height);
 	SquareWorld * squareWorld = dynamic_cast<SquareWorld *>(*world);
 	int aphidCount;

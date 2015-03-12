@@ -8,5 +8,5 @@
 class Printer
 {
 public:
-	virtual void print(std::multimap<Cell *, Creature *> & map, std::ostream & os) = 0;
+	virtual void print(std::map<Cell *, std::vector<Creature *>> & map, std::ostream & os) = 0;
 };

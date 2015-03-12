@@ -80,5 +80,8 @@
     <ClInclude Include="CreatureCounter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ActionHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

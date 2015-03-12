@@ -10,13 +10,13 @@ class SquareCell : public Cell
 private:
 
 	Cell * neighbours[8];
-	const int first = 0, last = 7;
+	const int last = 7;
 
 protected:
 
 	virtual void setNeighbour(int index, Cell * cell)
 	{
-		if (index >= first && index <= last)
+		if (index >= 0 && index <= last)
 		{
 			neighbours[index] = cell;
 		}
@@ -30,18 +30,11 @@ public:
 		memset(neighbours, (int)Cell::EDGE, sizeof(Cell *) * (last + 1));
 	}
 
-	virtual int firstNeighbour()
-	{
-		return first;
-	}
-
-	virtual int lastNeighbour() {
-		return last;
-	}
+	virtual int neighbourCount() { return last + 1; }
 
 	virtual Cell * getNeighbour(int index)
 	{
-		if (index >= first && index <= last)
+		if (index >= 0 && index <= last)
 		{
 			return neighbours[index];
 		}

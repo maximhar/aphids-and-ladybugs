@@ -1,18 +1,18 @@
 #pragma once
-
+#include <utility>
+#include <map>
+#include <vector>
 class Manager;
 class Creature;
 class Cell;
 class CreatureCounter;
-
-typedef void (Manager::*KilledCallback) (Creature & sender, Creature & victim);
-typedef void (Manager::*MovedCallback) (Creature & sender, Cell * location);
+class ActionHandler;
 
 class Creature 
 {
 private:
-	KilledCallback killCallback;
-	MovedCallback moveCallback;
+	
 public:
 	virtual void count(CreatureCounter & counter) = 0;
+	virtual void update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents) = 0;
 };
