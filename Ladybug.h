@@ -7,7 +7,6 @@ class Ladybug : public Creature, public CreatureInteractor
 private:
 	int generalDirection;
 public:
-	void count(CreatureCounter & counter) { counter.interact(*this); }
 	void update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents);
 	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);

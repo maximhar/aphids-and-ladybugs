@@ -52,7 +52,7 @@ public:
 		{
 			world->getPrinter().print(*creatures, std::cout);
 			updateAll();
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 			system("CLS");
 		}
 	}
@@ -94,10 +94,12 @@ public:
 		deleteCreature(self, location);
 		addCreature(self, *newloc);
 	}
+
 	void killed(Creature& self, Cell& location, Creature& victim)
 	{
 
 	}
+
 	void reproduced(Creature& self, Cell& location, Creature& partner)
 	{
 
