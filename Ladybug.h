@@ -1,14 +1,15 @@
 #pragma once
 #include "Creature.h"
 #include "CreatureCounter.h"
-class Ladybug : public Creature
+#include "CreatureInteractor.h"
+class Ladybug : public Creature, public CreatureInteractor
 {
 private:
 	int generalDirection;
 public:
-	void count(CreatureCounter & counter) { counter.count(*this); }
+	void count(CreatureCounter & counter) { counter.interact(*this); }
 	void update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents);
-	void interactWith(Creature & creature);
+	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);
 	void interact(Ladybug & creature);
 };

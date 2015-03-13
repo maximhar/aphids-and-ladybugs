@@ -83,5 +83,8 @@
     <ClInclude Include="ActionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CreatureInteractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,7 +25,7 @@ void SquarePrinter::print(std::map<Cell *, std::vector<Creature *>> & map, std::
 			{
 				auto range = rit->second;
 				for (auto iter = range.begin(); iter != range.end(); iter++){
-					(*iter)->count(counter);
+					(*iter)->interactWith(counter);
 				}
 			}
 			os << counter.getAphids() << counter.getLadybugs();

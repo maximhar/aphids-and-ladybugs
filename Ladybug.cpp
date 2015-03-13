@@ -1,6 +1,7 @@
 #include "Ladybug.h"
 #include "ActionHandler.h"
 #include "Cell.h"
+#include "CreatureInteractor.h"
 #include <iostream>
 
 void Ladybug::update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents)
@@ -9,13 +10,14 @@ void Ladybug::update(ActionHandler & handler, Cell & location, std::pair<std::ve
 	handler.moved(*this, location, dir);
 	for (auto it = contents.first; it != contents.second; ++it)
 	{
+		if (*it == this) continue;
 		(*it)->interactWith(*this);
 	}
 }
 
-void Ladybug::interactWith(Creature & creature)
+void Ladybug::interactWith(CreatureInteractor & creature)
 {
-	if (&creature != this) creature.interact(*this);
+	creature.interact(*this);
 }
 
 void Ladybug::interact(Aphid & creature)

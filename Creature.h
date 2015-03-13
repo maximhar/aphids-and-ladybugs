@@ -7,17 +7,14 @@ class Aphid;
 class Ladybug;
 class Creature;
 class Cell;
-class CreatureCounter;
 class ActionHandler;
+class CreatureInteractor;
 
 class Creature 
 {
 private:
 	
 public:
-	virtual void count(CreatureCounter & counter) = 0;
 	virtual void update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents) = 0;
-	virtual void interactWith(Creature & creature) = 0;
-	virtual void interact(Ladybug & creature) = 0;
-	virtual void interact(Aphid & creature) = 0;
+	virtual void interactWith(CreatureInteractor & creature) = 0;
 };

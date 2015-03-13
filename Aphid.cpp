@@ -1,6 +1,7 @@
 #include "Aphid.h"
 #include "Cell.h"
 #include "ActionHandler.h"
+#include "CreatureInteractor.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -11,13 +12,14 @@ void Aphid::update(ActionHandler & handler, Cell & location, std::pair<std::vect
 	handler.moved(*this, location, dir);
 	for (auto it = contents.first; it != contents.second; ++it)
 	{
+		if (*it == this) continue;
 		(*it)->interactWith(*this);
 	}
 }
 
-void Aphid::interactWith(Creature & creature)
+void Aphid::interactWith(CreatureInteractor & creature)
 {
-	if(&creature != this) creature.interact(*this);
+	creature.interact(*this);
 }
 
 void Aphid::interact(Aphid & creature)
