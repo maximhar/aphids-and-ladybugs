@@ -8,6 +8,7 @@ class CreatureCounter : public CreatureInteractor
 private:
 	int ladybugs, aphids;
 public:
+	CreatureCounter() : ladybugs(0), aphids(0) {}
 	void interact(Ladybug & ladybug) { ladybugs++; }
 	void interact(Aphid & aphid) { aphids++; }
 	void reset()

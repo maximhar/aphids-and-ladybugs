@@ -24,10 +24,10 @@ void Aphid::interactWith(CreatureInteractor & creature)
 
 void Aphid::interact(Aphid & creature)
 {
-	std::cout << "Aphid with aphid" << std::endl;
+	//std::cout << "Aphid with aphid" << std::endl;
 }
 
 void Aphid::interact(Ladybug & creature)
 {
-	std::cout << "Aphid with ladybug" << std::endl;
+	//std::cout << "Aphid with ladybug" << std::endl;
 }

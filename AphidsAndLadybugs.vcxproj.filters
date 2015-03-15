@@ -42,6 +42,9 @@
     <ClCompile Include="Ladybug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LadybugConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Manager.h">
@@ -84,6 +87,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CreatureInteractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatureConfiguration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LadybugConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
