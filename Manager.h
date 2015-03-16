@@ -48,6 +48,7 @@ public:
 			delete iter;
 		}
 		delete it;
+		worldMap->flush();
 		it = worldMap->allCreatures();
 		while (it->hasNext())
 		{
@@ -89,7 +90,7 @@ public:
 			countAll();
 			updateAll();
 			std::this_thread::sleep_for(std::chrono::milliseconds(200));
-			system("CLS");
+			//system("CLS");
 		}
 	}
 
@@ -107,16 +108,19 @@ public:
 
 		loc = loc->getNeighbour(direction);
 		worldMap->moveCreature(self, *loc);
+		//std::cout << "Creature moved" << std::endl;
 	}
 
 	void killed(Creature& self, Cell& location, Creature& victim)
 	{
 		worldMap->deleteCreature(victim);
+		std::cout << "Creature deleted" << std::endl;
 	}
 
 	void reproduced(Creature& self, Cell& location, Creature& partner, Creature& offspring)
 	{
 		worldMap->addCreature(offspring, location);
+		//std::cout << "Creature added" << std::endl;
 	}
 
 	~Manager()

@@ -27,6 +27,7 @@ private:
 	std::map<Creature *, Cell *> creatureCellMap;
 	std::queue<CreatureCellPair> additionQueue;
 	std::queue<Creature *> deletionQueue;
+	std::queue<CreatureCellPair> movementQueue;
 	bool cellExists(Cell & cell)
 	{
 		return cellCreaturesMap.count(&cell) > 0;
@@ -77,6 +78,22 @@ private:
 	void setCreatureCell(Creature & creature, Cell & cell)
 	{
 		creatureCellMap.find(&creature)->second = &cell;
+	}
+
+	void flushMovementQueue()
+	{
+		while (!movementQueue.empty())
+		{
+			CreatureCellPair pair = movementQueue.front();
+			if (creatureExists(*pair.creature))
+			{
+				Cell & oldCell = *getCreatureCell(*pair.creature);
+				setCreatureCell(*pair.creature, *pair.cell);
+				deleteCreatureFromCell(*pair.creature, oldCell);
+				addCreatureToCell(*pair.creature, *pair.cell);
+			}
+			movementQueue.pop();
+		}
 	}
 
 	void flushAdditionQueue()
@@ -156,8 +173,7 @@ private:
 public:
 	WorldMap() :
 		cellCreaturesMap(std::map<Cell *, std::set<Creature *> *>()),
-		creatureCellMap(std::map<Creature *, Cell *>()),
-		additionQueue(std::queue<CreatureCellPair>())
+		creatureCellMap(std::map<Creature *, Cell *>())
 	{
 	}
 	bool deleteCreature(Creature & creature);
@@ -165,17 +181,13 @@ public:
 	{
 		additionQueue.push(CreatureCellPair(&cell, &creature));
 	}
-	bool moveCreature(Creature & creature, Cell & newCell)
+	void moveCreature(Creature & creature, Cell & newCell)
 	{
-		if (!creatureExists(creature)) return false;
-		Cell & oldCell = *getCreatureCell(creature);
-		setCreatureCell(creature, newCell);
-		deleteCreatureFromCell(creature, oldCell);
-		addCreatureToCell(creature, newCell);
-		return true;
+		movementQueue.push(CreatureCellPair(&newCell, &creature));
 	}
 	void flush()
 	{
+		flushMovementQueue();
 		flushDeletionQueue();
 		flushAdditionQueue();
 	}

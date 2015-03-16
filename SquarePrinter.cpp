@@ -5,7 +5,7 @@
 #include <ostream>
 #include <utility>
 #include <map>
-
+#include <sstream>
 
 SquarePrinter::SquarePrinter(SquareWorld * world) : world(world) { }
 void SquarePrinter::print(WorldMap & map, std::ostream & os)
@@ -30,7 +30,12 @@ void SquarePrinter::print(WorldMap & map, std::ostream & os)
 				}
 				delete creatures;
 			}
-			os << counter.getAphids() << counter.getLadybugs();
+			std::stringstream ss;
+			if (counter.getAphids() < 10) ss << counter.getAphids();
+			else ss << "~";
+			if (counter.getLadybugs() < 10) ss << counter.getLadybugs();
+			else ss << "~";
+			os << ss.str();
 			cc = cc->getNeighbour(SquareCell::RIGHT);
 		}
 		os << std::endl;

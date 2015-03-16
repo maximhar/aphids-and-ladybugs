@@ -28,10 +28,13 @@ void WorldMap::flushDeletionQueue()
 	while (!deletionQueue.empty())
 	{
 		Creature * cr = deletionQueue.front();
-		Cell * cell = getCreatureCell(*cr);
-		deleteCreatureFromCell(*cr, *cell);
-		deleteCreatureFromSet(*cr);
-		delete cr;
+		if (creatureExists(*cr))
+		{
+			Cell * cell = getCreatureCell(*cr);
+			deleteCreatureFromCell(*cr, *cell);
+			deleteCreatureFromSet(*cr);
+			delete cr;
+		}
 		deletionQueue.pop();
 	}
 }
