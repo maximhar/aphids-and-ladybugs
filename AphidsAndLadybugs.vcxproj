@@ -44,6 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_HAS_ITERATOR_DEBUGGING=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -66,6 +67,7 @@
   <ItemGroup>
     <ClInclude Include="ActionHandler.h" />
     <ClInclude Include="Aphid.h" />
+    <ClInclude Include="AphidConfiguration.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CreatureConfiguration.h" />
     <ClInclude Include="CreatureCounter.h" />
@@ -80,9 +82,11 @@
     <ClInclude Include="SquarePrinter.h" />
     <ClInclude Include="SquareWorld.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="WorldMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Aphid.cpp" />
+    <ClCompile Include="AphidConfiguration.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Ladybug.cpp" />
     <ClCompile Include="LadybugConfiguration.cpp" />
@@ -92,6 +96,7 @@
     <ClCompile Include="SquareLoader.cpp" />
     <ClCompile Include="SquarePrinter.cpp" />
     <ClCompile Include="SquareWorld.cpp" />
+    <ClCompile Include="WorldMap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

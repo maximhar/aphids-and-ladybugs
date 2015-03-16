@@ -14,5 +14,5 @@ private:
 	SquareWorld * world;
 public:
 	SquarePrinter(SquareWorld * world);
-	virtual void print(std::map<Cell *, std::vector<Creature *>> & map, std::ostream & os);
+	virtual void print(WorldMap & map, std::ostream & os);
 };

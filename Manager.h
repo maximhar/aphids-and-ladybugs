@@ -12,6 +12,7 @@
 #include "SquareLoader.h"
 #include "ActionHandler.h"
 #include "CreatureCounter.h"
+#include "WorldMap.h"
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -21,62 +22,61 @@
 class Manager : public ActionHandler
 {
 private:
-	std::map<Cell *, std::vector<Creature *>> * cellCreaturesMap;
-	std::map<Creature *, Cell *> creatureCellMap;
-	std::set<Creature *> modified;
 	World * world;
+	WorldMap * worldMap;
 public:
 	Manager()
 	{
-		SquareLoader * load = new SquareLoader();
-		std::ifstream config;
-		config.open("manager.txt");
+		Loader * loader = new SquareLoader();
+		worldMap = new WorldMap();
+		std::ifstream config("manager.txt");
 		if (!config.is_open()) std::cout << "File is not open...";
-		else load->load(&cellCreaturesMap, &world, config);
+		else
+		{
+			world = loader->load(worldMap, config);
+		}
 	}
 	
-	bool isModified(Creature * creature)
-	{
-		return(modified.count(creature) > 0);
-	}
-
-	void setModified(Creature * creature)
-	{
-		modified.insert(creature);
-	}
-
-	//TODO: map cell creatures to creature cell map, and make updateAll iterate creature cell
-
 	void updateAll()
 	{
-		modified.clear();
-		auto map = std::map<Cell *, std::vector<Creature *>>(*cellCreaturesMap);
-		auto begin = map.begin();
-		auto end = map.end();
-		for (auto it = begin; it != end; it++)
-		{
-			auto & vec = it->second; 
-			for (auto it2 = vec.begin(); it2 != vec.end(); it2++)
-			{
-				if (isModified(*it2)) 
-					continue;
-				(*it2)->update(*this, *it->first, std::make_pair(it->second.begin(), it->second.end()));
-			}
+		WorldMap::CreatureIterator * it = worldMap->allCreatures();
+		while (it->hasNext())
+		{	
+			auto pair = it->next();
+			auto iter = worldMap->creaturesInCell(*pair.cell);
+			pair.creature->move(*this, *pair.cell, iter);
+			delete iter;
 		}
+		delete it;
+		it = worldMap->allCreatures();
+		while (it->hasNext())
+		{
+			auto pair = it->next();
+			auto iter = worldMap->creaturesInCell(*pair.cell);
+			pair.creature->kill(*this, *pair.cell, iter);
+			delete iter;
+		}
+		delete it;
+		it = worldMap->allCreatures();
+		while (it->hasNext())
+		{
+			auto pair = it->next();
+			auto iter = worldMap->creaturesInCell(*pair.cell);
+			pair.creature->procreate(*this, *pair.cell, iter);
+			delete iter;
+		}
+		worldMap->flush();
+		delete it;
 	}
 
 	void countAll()
 	{
 		CreatureCounter counter;
-		auto begin = cellCreaturesMap->begin();
-		auto end = cellCreaturesMap->end();
-		for (auto it = begin; it != end; it++)
+		WorldMap::CreatureIterator *  it = worldMap->allCreatures();
+		while (it->hasNext())
 		{
-			auto vec = &it->second;
-			for (auto it2 = vec->begin(); it2 != vec->end(); it2++)
-			{
-				(*it2)->interactWith(counter);
-			}
+			auto pair = it->next();
+			pair.creature->interactWith(counter);
 		}
 		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << std::endl;
 	}
@@ -85,77 +85,43 @@ public:
 	{
 		while (true)
 		{
-			world->getPrinter().print(*cellCreaturesMap, std::cout);
+			world->getPrinter().print(*worldMap, std::cout);
 			countAll();
 			updateAll();
-			std::this_thread::sleep_for(std::chrono::milliseconds(250));
+			std::this_thread::sleep_for(std::chrono::milliseconds(200));
 			system("CLS");
 		}
 	}
 
-	bool deleteCreature(Creature& creature, Cell& cell)
-	{
-		auto range = cellCreaturesMap->find(&cell);
-		for (auto it = range->second.begin(); it != range->second.end(); it++)
-		{
-			if ((*it) == &creature)
-			{
-				range->second.erase(it);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	void addCreature(Creature& creature, Cell& cell)
-	{
-		auto it = cellCreaturesMap->find(&cell);
-		if (it == cellCreaturesMap->end())
-		{
-			it = cellCreaturesMap->insert(std::make_pair(&cell, std::vector<Creature *>())).first;
-		}
-		it->second.push_back(&creature);
-	}
-
 	void moved(Creature& self, Cell& location, int direction)
 	{
-		if (location.getNeighbour(direction) == Cell::EDGE)
-			direction = (direction + location.neighbourCount() / 2) % location.neighbourCount();
+		Cell * loc = &location;
+		if (loc->getNeighbour(direction) == Cell::EDGE)
+			direction = (direction + loc->neighbourCount() / 2) % loc->neighbourCount();
 
-		Cell * newloc;
-		if ((newloc = location.getNeighbour(direction)) == Cell::EDGE)
-			direction = (location.neighbourCount() - direction) % location.neighbourCount();
-		newloc = location.getNeighbour(direction);
-		if (newloc == Cell::EDGE) return; 
+		if (loc->getNeighbour(direction) == Cell::EDGE)
+			direction = (loc->neighbourCount() - direction) % loc->neighbourCount();
 
-		deleteCreature(self, location);
-		addCreature(self, *newloc);
+		if (loc->getNeighbour(direction) == Cell::EDGE)
+			return;
+
+		loc = loc->getNeighbour(direction);
+		worldMap->moveCreature(self, *loc);
 	}
 
 	void killed(Creature& self, Cell& location, Creature& victim)
 	{
-		bool suc = deleteCreature(victim, location);
-		if(suc) setModified(&victim);
-		std::cout << "Creature deleted, success " << suc << std::endl;
+		worldMap->deleteCreature(victim);
 	}
 
 	void reproduced(Creature& self, Cell& location, Creature& partner, Creature& offspring)
 	{
-		addCreature(offspring, location);
-		//std::cout << "Creature added" << std::endl;
+		worldMap->addCreature(offspring, location);
 	}
 
 	~Manager()
 	{
-		
-		for (auto iter = cellCreaturesMap->begin(); iter != cellCreaturesMap->end(); ++iter)
-		{
-			for (auto it2 = iter->second.begin(); it2 != iter->second.end(); it2++)
-			{
-				delete (*it2);
-			}
-			
-		}
+		delete worldMap;
 		delete world;
 	}
 };

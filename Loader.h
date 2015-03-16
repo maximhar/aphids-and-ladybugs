@@ -4,9 +4,9 @@
 #include "Cell.h"
 #include "Creature.h"
 #include "World.h"
-
+#include "WorldMap.h"
 class Loader
 {
 public:
-	virtual bool load(std::map<Cell *, std::vector<Creature *>> ** map, World ** world, std::istream & is) = 0;
+	virtual World * load(WorldMap * map, std::istream & is) = 0;
 };

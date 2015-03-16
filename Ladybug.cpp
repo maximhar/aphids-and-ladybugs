@@ -9,25 +9,33 @@
 ActionHandler * _handler;
 Cell * _location;
 
-void Ladybug::update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents)
+void Ladybug::move(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
 {
-	_handler = &handler;
-	_location = &location;
-	setPhase(Creature::MOVING);
+	Creature::move(handler, location, contents);
 	int dir = (rand() % (location.neighbourCount()/2)) * 2;
 	handler.moved(*this, location, dir);
-	setPhase(Creature::KILLING);
-	for (auto it = contents.first; it != contents.second; ++it)
+}
+
+void Ladybug::kill(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+{
+	Creature::kill(handler, location, contents);
+	while (contents->hasNext())
 	{
-		if (*it == this) continue;
-		(*it)->interactWith(*this);
+		auto pair = contents->next();
+		if (pair.creature == this) continue;
+		pair.creature->interactWith(*this);
 		break;
 	}
-	setPhase(Creature::PROCREATING);
-	for (auto it = contents.first; it != contents.second; ++it)
+}
+
+void Ladybug::procreate(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+{
+	Creature::procreate(handler, location, contents);
+	while (contents->hasNext())
 	{
-		if (*it == this) continue;
-		(*it)->interactWith(*this);
+		auto pair = contents->next();
+		if (pair.creature == this) continue;
+		pair.creature->interactWith(*this);
 		break;
 	}
 }
@@ -41,11 +49,10 @@ void Ladybug::interact(Aphid & creature)
 {
 	if (getPhase() != Creature::KILLING) return;
 	float p = LadybugConfiguration::get().getKillAphidProbability();
-	float r = (rand() % 100) / 100.0f;
-	if (p > r)
+	if (roll(p))
 	{
 		//std::cout << "Ladybug killing aphid" << std::endl;
-		_handler->killed(*this, *_location, creature);
+		getActionHandler().killed(*this, getLocation(), creature);
 	}
 }
 
@@ -53,10 +60,9 @@ void Ladybug::interact(Ladybug & creature)
 {
 	if (getPhase() != Creature::PROCREATING) return;
 	float p = LadybugConfiguration::get().getReproduceProbability();
-	float r = (rand() % 100) / 100.0f;
-	if (p > r)
+	if (roll(p))
 	{
 		//std::cout << "Ladybug giving birth" << std::endl;
-		_handler->reproduced(*this, *_location, creature, *(new Ladybug()));
+		getActionHandler().reproduced(*this, getLocation(), creature, *(new Ladybug()));
 	}
 }

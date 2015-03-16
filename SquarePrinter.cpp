@@ -8,7 +8,7 @@
 
 
 SquarePrinter::SquarePrinter(SquareWorld * world) : world(world) { }
-void SquarePrinter::print(std::map<Cell *, std::vector<Creature *>> & map, std::ostream & os)
+void SquarePrinter::print(WorldMap & map, std::ostream & os)
 {
 	os << "Square World: " << std::endl;
 	Cell * cr = &world->getOrigin();
@@ -19,14 +19,16 @@ void SquarePrinter::print(std::map<Cell *, std::vector<Creature *>> & map, std::
 		while (cc != Cell::EDGE)
 		{
 			os << " ";
-			auto rit = map.find(cc);
+			WorldMap::CreatureIterator * creatures = map.creaturesInCell(*cc);
 			counter.reset();
-			if (rit != map.end()) 
+			if (creatures != NULL) 
 			{
-				auto range = rit->second;
-				for (auto iter = range.begin(); iter != range.end(); iter++){
-					(*iter)->interactWith(counter);
+				while (creatures->hasNext())
+				{
+					WorldMap::CreatureCellPair pair = creatures->next();
+					pair.creature->interactWith(counter);
 				}
+				delete creatures;
 			}
 			os << counter.getAphids() << counter.getLadybugs();
 			cc = cc->getNeighbour(SquareCell::RIGHT);

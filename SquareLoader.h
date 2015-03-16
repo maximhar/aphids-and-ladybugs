@@ -5,8 +5,8 @@
 class SquareLoader : public Loader
 {
 private:
-	void place(std::map<Cell *, std::vector<Creature *>> * map, SquareWorld * world, Creature * creature, int col, int row);
+	void place(WorldMap * map, SquareWorld * world, Creature * creature, int col, int row);
 public:
-	virtual bool load(std::map<Cell *, std::vector<Creature *>> ** map, World ** world, std::istream & is);
+	virtual World * load(WorldMap * map, std::istream & is);
 };
 

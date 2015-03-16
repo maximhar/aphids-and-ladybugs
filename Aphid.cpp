@@ -2,18 +2,43 @@
 #include "Cell.h"
 #include "ActionHandler.h"
 #include "CreatureInteractor.h"
+#include "AphidConfiguration.h"
+#include "Ladybug.h"
 #include <cstdlib>
 #include <iostream>
 
-
-void Aphid::update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents)
+void Aphid::move(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
 {
-	int dir = rand() % location.neighbourCount();
-	handler.moved(*this, location, dir);
-	for (auto it = contents.first; it != contents.second; ++it)
+	Creature::move(handler, location, contents);
+	float p = AphidConfiguration::get().getMoveProbability();
+	if (roll(p))
 	{
-		if (*it == this) continue;
-		(*it)->interactWith(*this);
+		int dir = rand() % location.neighbourCount();
+		handler.moved(*this, location, dir);
+	}
+}
+
+void Aphid::kill(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+{
+	Creature::kill(handler, location, contents);
+	while (contents->hasNext())
+	{
+		auto pair = contents->next();
+		if (pair.creature == this) continue;
+		pair.creature->interactWith(*this);
+		break;
+	}
+}
+
+void Aphid::procreate(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+{
+	Creature::procreate(handler, location, contents);
+	while (contents->hasNext())
+	{
+		auto pair = contents->next();
+		if (pair.creature == this) continue;
+		pair.creature->interactWith(*this);
+		break;
 	}
 }
 
@@ -24,10 +49,20 @@ void Aphid::interactWith(CreatureInteractor & creature)
 
 void Aphid::interact(Aphid & creature)
 {
-	//std::cout << "Aphid with aphid" << std::endl;
+	if (getPhase() != Creature::PROCREATING) return;
+	float p = AphidConfiguration::get().getReproduceProbability();
+	if (roll(p))
+	{
+		getActionHandler().reproduced(*this, getLocation(), creature, *(new Aphid()));
+	}
 }
 
 void Aphid::interact(Ladybug & creature)
 {
-	//std::cout << "Aphid with ladybug" << std::endl;
+	if (getPhase() != Creature::KILLING) return;
+	float p = AphidConfiguration::get().getKillLadybugProbability();
+	if (roll(p))
+	{
+		getActionHandler().killed(*this, getLocation(), creature);
+	}
 }

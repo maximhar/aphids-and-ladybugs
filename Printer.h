@@ -4,9 +4,9 @@
 #include <map>
 #include <ostream>
 #include "Creature.h"
-
+#include "WorldMap.h"
 class Printer
 {
 public:
-	virtual void print(std::map<Cell *, std::vector<Creature *>> & map, std::ostream & os) = 0;
+	virtual void print(WorldMap & map, std::ostream & os) = 0;
 };

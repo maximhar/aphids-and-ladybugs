@@ -5,7 +5,9 @@
 class Aphid : public Creature, public CreatureInteractor
 {
 public:
-	void update(ActionHandler & handler, Cell & location, std::pair<std::vector<Creature *>::iterator, std::vector<Creature * >::iterator> contents);
+	void move(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents);
+	void kill(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents);
+	void procreate(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents);
 	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);
 	void interact(Ladybug & creature);
