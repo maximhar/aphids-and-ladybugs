@@ -23,8 +23,7 @@ private:
 	CreatureCounter counter;
 	bool hasReproduced;
 	int lifespan;
-	float food;
-	float nutritionalValue;
+	double food;
 protected:
 	enum Phase { MOVING, KILLING, PROCREATING, SURVIVING };
 	Phase getPhase() { return phase; }
@@ -39,24 +38,28 @@ protected:
 	virtual void kill();
 	virtual void procreate();
 	virtual void suicide() = 0;
-	virtual float eat() = 0;
-	virtual float getDefaultNutritionalValue() = 0;
+	virtual double eat() = 0;
+	virtual double getDefaultNutritionalValue() = 0;
 	virtual void interactImpl(Creature * creature) = 0;
 	virtual int getDirection() = 0;
-	virtual float getMoveProbability() = 0;
-	void addFood(float f) { food += f; }
+	virtual double getMoveProbability() = 0;
+	void addFood(double f) { food += f; }
+	void killCreature(Creature & creature);
+	void makeBaby(Creature & parent, Creature & baby, double babyFood);
 	CreatureCounter getCounter() { return counter; }
 	bool roll(float p)
 	{
 		float r = (rand() % 100) / 100.0f;
 		return (p > r);
 	}
-	void giveBabyFood(Creature & otherParent, Creature & baby, float amount)
+	void giveBabyFood(Creature & otherParent, Creature & baby, double amount)
 	{
-		float actual = std::min(amount / 2, std::min(food, otherParent.food));
-		baby.food += actual*2;
-		otherParent.food -= actual;
-		food -= actual;
+		double actual1 = std::min(amount / 2, food / 1.5);
+		double actual2 = std::min(amount / 2, otherParent.food / 1.5);
+		baby.food += actual1;
+		baby.food += actual2;
+		otherParent.food -= actual2;
+		food -= actual1;
 	}
 	void initialiseState(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents, CreatureCounter cellCounter)
 	{
@@ -68,7 +71,7 @@ protected:
 private:
 	Phase phase;
 public:
-	Creature(int lifespan, float startFood) : 
+	Creature(int lifespan, double startFood) :
 		hasReproduced(false), lifespan(lifespan), food(startFood)
 	{
 	}
@@ -102,5 +105,5 @@ public:
 	}
 	virtual void interactWith(CreatureInteractor & creature) = 0;
 	bool getReproduced() { return hasReproduced; }
-	float getNutritionalValue() { return getDefaultNutritionalValue() + food; }
+	double getNutritionalValue() { return getDefaultNutritionalValue() + food; }
 };

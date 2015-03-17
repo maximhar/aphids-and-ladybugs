@@ -9,11 +9,11 @@ private:
 protected:
 	void move();
 	void suicide();
-	float eat();
-	float getDefaultNutritionalValue();
+	double eat();
+	double getDefaultNutritionalValue();
 	void interactImpl(Creature * creature) { creature->interactWith(*this); }
 	int getDirection();
-	float getMoveProbability();
+	double getMoveProbability();
 public:
 	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);

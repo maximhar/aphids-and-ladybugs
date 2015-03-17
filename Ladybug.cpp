@@ -25,13 +25,13 @@ int Ladybug::getDirection()
 
 void Ladybug::suicide() { getActionHandler().killed(*this, getLocation(), *this); }
 
-float Ladybug::eat() { return LadybugConfiguration::get().getFoodPerTurn(); }
+double Ladybug::eat() { return LadybugConfiguration::get().getFoodPerTurn(); }
 
-float Ladybug::getDefaultNutritionalValue() { return LadybugConfiguration::get().getNutritionalValue(); }
+double Ladybug::getDefaultNutritionalValue() { return LadybugConfiguration::get().getNutritionalValue(); }
 
 void Ladybug::interactWith(CreatureInteractor & creature) { creature.interact(*this); }
 
-float Ladybug::getMoveProbability() { return LadybugConfiguration::get().getMoveProbability(); }
+double Ladybug::getMoveProbability() { return LadybugConfiguration::get().getMoveProbability(); }
 
 void Ladybug::interact(Aphid & creature)
 {
@@ -39,8 +39,7 @@ void Ladybug::interact(Aphid & creature)
 	float p = LadybugConfiguration::get().getKillAphidProbability();
 	if (roll(p))
 	{
-		getActionHandler().killed(*this, getLocation(), creature);
-		addFood(creature.getNutritionalValue());
+		killCreature(creature);
 	}
 }
 
@@ -51,9 +50,8 @@ void Ladybug::interact(Ladybug & creature)
 	float p = LadybugConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
-		Creature * baby = new Ladybug((LadybugConfiguration::get().getLife() / (getCounter().getLadybugs() - 1)), 0);
-		getActionHandler().reproduced(*this, getLocation(), creature, *baby);
-		giveBabyFood(creature, *baby, LadybugConfiguration::get().getStartingFood());
+		Creature * baby = new Ladybug(LadybugConfiguration::get().getLife(), 0);
+		makeBaby(creature, *baby, LadybugConfiguration::get().getStartingFood());
 	}
 }
 

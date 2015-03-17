@@ -31,3 +31,17 @@ void Creature::procreate()
 		break;
 	}
 }
+
+void Creature::killCreature(Creature & creature)
+{
+	getActionHandler().killed(*this, getLocation(), creature);
+	addFood(creature.getNutritionalValue());
+	creature.food = 0;
+}
+void Creature::makeBaby(Creature & parent, Creature & baby, double babyFood)
+{
+	getActionHandler().reproduced(*this, getLocation(), parent, baby);
+	giveBabyFood(parent, baby, babyFood);
+	parent.setReproduced(true);
+	setReproduced(true);
+}

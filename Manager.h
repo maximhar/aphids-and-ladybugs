@@ -18,6 +18,7 @@
 #include <vector>
 #include <cmath>
 #include <set>
+#include <iomanip>
 
 class Manager : public ActionHandler
 {
@@ -43,8 +44,6 @@ public:
 	void updateAll()
 	{
 		WorldMap::CreatureIterator * it = worldMap->allCreatures();
-
-		worldMap->flush();
 		while (it->hasNext())
 		{	
 			auto pair = it->next();
@@ -89,9 +88,15 @@ public:
 	{
 		turn++;
 		CreatureCounter counter = worldMap->getTotalsCounter();
-		//std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << std::endl;
-		//std::cout << "Turn: " << turn << std::endl;
-		os << counter.getAphids() << "," << counter.getLadybugs() << std::endl;
+		auto it = worldMap->allCreatures();
+		double totalFood = 0;
+		while (it->hasNext())
+		{
+			totalFood += it->next().creature->getNutritionalValue();
+		}
+		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << " Food: " << std::showpoint << std::fixed << std::setw(2) << totalFood << std::endl;
+		std::cout << "Turn: " << turn << std::endl;
+		os << counter.getAphids() << "," << counter.getLadybugs() << "," << std::showpoint << std::fixed << std::setw(2) << totalFood/1000 << std::endl;
 		os.flush();
 		return counter.getAphids() > 0 || counter.getLadybugs() > 0;
 	}
@@ -122,7 +127,6 @@ public:
 
 		loc = loc->getNeighbour(direction);
 		worldMap->moveCreature(self, *loc);
-		//std::cout << "Creature moved" << std::endl;
 	}
 
 	void killed(Creature& self, Cell& location, Creature& victim)
@@ -133,7 +137,6 @@ public:
 	void reproduced(Creature& self, Cell& location, Creature& partner, Creature& offspring)
 	{
 		worldMap->addCreature(offspring, location);
-		//std::cout << "Creature added" << std::endl;
 	}
 
 	~Manager()
