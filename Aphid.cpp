@@ -34,6 +34,7 @@ void Aphid::procreate()
 	{
 		auto pair = getContents().next();
 		if (pair.creature == this) continue;
+		if (pair.creature->getReproduced()) continue;
 		pair.creature->interactWith(*this);
 		break;
 	}
@@ -44,6 +45,8 @@ void Aphid::suicide()
 	getActionHandler().killed(*this, getLocation(), *this);
 }
 
+
+float Aphid::eat() { return 1; }
 
 void Aphid::interactWith(CreatureInteractor & creature)
 {
@@ -58,9 +61,11 @@ void Aphid::interact(Aphid & creature)
 	if (roll(p))
 	{
 		CreatureCounter counter = getCounter();
-		getActionHandler().reproduced(*this, getLocation(), creature, *(new Aphid(APHID_LIFE/5 + 4*((APHID_LIFE/5) / (counter.getAphids()-1)))));
+		Creature * baby = new Aphid((APHID_LIFE / (counter.getAphids() - 1)), 0);
+		getActionHandler().reproduced(*this, getLocation(), creature, *baby);
 		creature.setReproduced(true);
 		setReproduced(true);
+		giveBabyFood(creature, *baby, APHID_START_FOOD);
 	}
 }
 
@@ -74,5 +79,6 @@ void Aphid::interact(Ladybug & creature)
 	if (roll(p + gn))
 	{
 		getActionHandler().killed(*this, getLocation(), creature);
+		addFood(creature.getNutritionalValue());
 	}
 }

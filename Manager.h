@@ -25,11 +25,13 @@ private:
 	World * world;
 	WorldMap * worldMap;
 	int turn;
+	std::ofstream os;
 public:
 	Manager() : worldMap(new WorldMap()), turn(0)
 	{
 		Loader * loader = new SquareLoader();
 		std::ifstream config("manager.txt");
+		os = std::ofstream("graph.csv");
 		if (!config.is_open()) std::cout << "File is not open...";
 		else
 		{
@@ -60,6 +62,7 @@ public:
 			delete iter;
 		}
 		delete it;
+		worldMap->flush();
 		it = worldMap->allCreatures();
 		while (it->hasNext())
 		{
@@ -87,6 +90,8 @@ public:
 		CreatureCounter counter = worldMap->getTotalsCounter();
 		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << std::endl;
 		std::cout << "Turn: " << turn << std::endl;
+		os << counter.getAphids() << "," << counter.getLadybugs() << std::endl;
+		os.flush();
 	}
 
 	void run()

@@ -5,14 +5,21 @@
 #include "LadybugConfiguration.h"
 #include "Aphid.h"
 #include <iostream>
-
-ActionHandler * _handler;
-Cell * _location;
-
+#include <cmath>
 void Ladybug::move()
 {
-	int dir = (rand() % (getLocation().neighbourCount()/2)) * 2;
-	getActionHandler().moved(*this, getLocation(), dir);
+	float gp = LadybugConfiguration::get().getDirectionChangeProbability();
+	if (roll(gp))
+	{
+		generalDirection = (rand() % (getLocation().neighbourCount() / 2)) * 2;
+	}
+	float mp = LadybugConfiguration::get().getMoveProbability();
+	if (roll(mp))
+	{
+		int offset = (rand() % 3) - 1;
+		int finDir = ((generalDirection + offset) + (getLocation().neighbourCount()-1)) % (getLocation().neighbourCount()-1);
+		getActionHandler().moved(*this, getLocation(), finDir);
+	}
 }
 
 void Ladybug::kill()
@@ -32,6 +39,7 @@ void Ladybug::procreate()
 	{
 		auto pair = getContents().next();
 		if (pair.creature == this) continue;
+		if (pair.creature->getReproduced()) continue;
 		pair.creature->interactWith(*this);
 		break;
 	}
@@ -41,6 +49,8 @@ void Ladybug::suicide()
 {
 	getActionHandler().killed(*this, getLocation(), *this);
 }
+
+float Ladybug::eat() { return 2; }
 
 void Ladybug::interactWith(CreatureInteractor & creature)
 {
@@ -53,8 +63,8 @@ void Ladybug::interact(Aphid & creature)
 	float p = LadybugConfiguration::get().getKillAphidProbability();
 	if (roll(p))
 	{
-		//std::cout << "Ladybug killing aphid" << std::endl;
 		getActionHandler().killed(*this, getLocation(), creature);
+		addFood(creature.getNutritionalValue());
 	}
 }
 
@@ -65,8 +75,9 @@ void Ladybug::interact(Ladybug & creature)
 	float p = LadybugConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
-		//std::cout << "Ladybug giving birth" << std::endl;
-		getActionHandler().reproduced(*this, getLocation(), creature, *(new Ladybug(LADYBUG_LIFE)));
+		Creature * baby = new Ladybug((LADYBUG_LIFE / (getCounter().getLadybugs() - 1)), 0);
+		getActionHandler().reproduced(*this, getLocation(), creature, *baby);
+		giveBabyFood(creature, *baby, LADYBUG_START_FOOD);
 	}
 }
 
