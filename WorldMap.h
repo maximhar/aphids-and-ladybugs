@@ -21,6 +21,7 @@ public:
 		virtual bool hasNext() = 0;
 		virtual CreatureCellPair next() = 0;
 		virtual void reset() = 0;
+		virtual CreatureIterator * copy() = 0;
 	};
 private:
 	std::map<Cell *, std::set<Creature *> *> cellCreaturesMap;
@@ -136,6 +137,10 @@ private:
 		{
 			current = begin;
 		}
+		CreatureIterator * copy()
+		{
+			return new CreatureMapIterator(*this);
+		}
 	};
 
 	class CreatureSetIterator : public CreatureIterator
@@ -167,6 +172,10 @@ private:
 		void reset()
 		{
 			current = begin;
+		}
+		CreatureIterator * copy()
+		{
+			return new CreatureSetIterator(*this);
 		}
 	};
 

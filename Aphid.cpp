@@ -61,7 +61,17 @@ void Aphid::interact(Ladybug & creature)
 {
 	if (getPhase() != Creature::KILLING) return;
 	float p = AphidConfiguration::get().getKillLadybugProbability();
-	if (roll(p))
+	float g = AphidConfiguration::get().getKillLadybugGroupProbability();
+	WorldMap::CreatureIterator * contents = getContents().copy();
+	CreatureCounter counter;
+	contents->reset();
+	while (contents->hasNext())
+	{
+		contents->next().creature->interactWith(counter);
+	}
+	float gn = (counter.getAphids() - 1) * g;
+	delete contents;
+	if (roll(p + gn))
 	{
 		getActionHandler().killed(*this, getLocation(), creature);
 	}
