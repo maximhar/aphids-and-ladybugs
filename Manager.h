@@ -33,7 +33,8 @@ public:
 		Loader * loader = new SquareLoader();
 		std::ifstream config("manager.txt");
 		os = std::ofstream("graph.csv");
-		if (!config.is_open()) std::cout << "File is not open...";
+		if (!os.is_open()) std::cout << "Graph file is not open...";
+		if (!config.is_open()) std::cout << "World config is not open...";
 		else
 		{
 			world = loader->load(worldMap, config);
@@ -62,7 +63,6 @@ public:
 			delete iter;
 		}
 		delete it;
-		worldMap->flush();
 		it = worldMap->allCreatures();
 		while (it->hasNext())
 		{
@@ -71,7 +71,7 @@ public:
 			pair.creature->procreate(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
 			delete iter;
 		}
-		worldMap->flush();
+		delete it;
 		it = worldMap->allCreatures();
 		while (it->hasNext())
 		{
@@ -97,7 +97,6 @@ public:
 		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << ", Corpses: " << counter.getCorpses() << ", Food: " << std::showpoint << std::fixed << std::setw(2) << totalFood << std::endl;
 		std::cout << "Turn: " << turn << std::endl;
 		os << counter.getAphids() << "," << counter.getLadybugs() << "," << counter.getCorpses() << "," << std::showpoint << std::fixed << std::setw(2) << totalFood / 1000 << std::endl;
-		os.flush();
 		return counter.getAphids() > 0 || counter.getLadybugs() > 0;
 	}
 
@@ -106,8 +105,8 @@ public:
 		while (true)
 		{
 			//world->getPrinter().print(*worldMap, std::cout);
-			if (!countAll()) return;
 			updateAll();
+			if (!countAll()) return;
 			//std::this_thread::sleep_for(std::chrono::milliseconds(200));
 			//std::cin.get();
 		}

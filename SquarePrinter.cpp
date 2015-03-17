@@ -18,7 +18,6 @@ void SquarePrinter::print(WorldMap & map, std::ostream & os)
 		while (cc != Cell::EDGE)
 		{
 			os << " ";
-			WorldMap::CreatureIterator * creatures = map.creaturesInCell(*cc);
 			CreatureCounter counter = map.getCounterForCell(*cc);
 			std::stringstream ss;
 			if (counter.getAphids() < 10) ss << counter.getAphids();

@@ -93,7 +93,7 @@ private:
 		std::map<Creature *, Cell *>::const_iterator current;
 	public:
 		CreatureMapIterator(std::map<Creature *, Cell *> * creatures)
-			: begin(creatures->cbegin()), end(creatures->cend())
+			: begin(creatures->begin()), end(creatures->end())
 		{
 			current = begin;
 		}
@@ -127,7 +127,7 @@ private:
 		Cell * cell;
 	public:
 		CreatureSetIterator(std::set<Creature *> * creatures, Cell * cell)
-			: begin(creatures->cbegin()), end(creatures->cend()), cell(cell)
+			: begin(creatures->begin()), end(creatures->end()), cell(cell)
 		{
 			current = begin;
 		}
