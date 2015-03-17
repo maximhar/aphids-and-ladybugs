@@ -32,6 +32,13 @@ void Creature::procreate()
 	}
 }
 
+void Creature::survive()
+{
+	decreaseLifespan();
+	food = eat(food);
+	if (!isAlive() || food < 0) suicide();
+}
+
 void Creature::killCreature(Creature & creature)
 {
 	getActionHandler().killed(*this, getLocation(), creature);

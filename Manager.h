@@ -94,9 +94,9 @@ public:
 		{
 			totalFood += it->next().creature->getNutritionalValue();
 		}
-		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << " Food: " << std::showpoint << std::fixed << std::setw(2) << totalFood << std::endl;
+		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << ", Corpses: " << counter.getCorpses() << ", Food: " << std::showpoint << std::fixed << std::setw(2) << totalFood << std::endl;
 		std::cout << "Turn: " << turn << std::endl;
-		os << counter.getAphids() << "," << counter.getLadybugs() << "," << std::showpoint << std::fixed << std::setw(2) << totalFood/1000 << std::endl;
+		os << counter.getAphids() << "," << counter.getLadybugs() << "," << counter.getCorpses() << "," << std::showpoint << std::fixed << std::setw(2) << totalFood / 1000 << std::endl;
 		os.flush();
 		return counter.getAphids() > 0 || counter.getLadybugs() > 0;
 	}

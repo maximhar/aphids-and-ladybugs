@@ -110,5 +110,8 @@
     <ClInclude Include="AphidConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Corpse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

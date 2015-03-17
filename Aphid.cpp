@@ -4,14 +4,19 @@
 #include "CreatureInteractor.h"
 #include "AphidConfiguration.h"
 #include "Ladybug.h"
+#include "Corpse.h"
 #include <cstdlib>
 #include <iostream>
 
 int Aphid::getDirection() { return rand() % getLocation().neighbourCount(); }
 
-void Aphid::suicide() { getActionHandler().killed(*this, getLocation(), *this); }
+void Aphid::suicide() 
+{ 
+	getActionHandler().killed(*this, getLocation(), *this); 
+	getActionHandler().reproduced(*this, getLocation(), *this, *(new Corpse(this)));
+}
 
-double Aphid::eat() { return AphidConfiguration::get().getFoodPerTurn(); }
+double Aphid::eat(double initial) { return initial - AphidConfiguration::get().getFoodPerTurn(); }
 
 double Aphid::getDefaultNutritionalValue() { return AphidConfiguration::get().getNutritionalValue(); }
 
@@ -39,6 +44,16 @@ void Aphid::interact(Ladybug & creature)
 	CreatureCounter counter = getCounter();
 	float gn = (counter.getAphids() - 1) * g;
 	if (roll(p + gn))
+	{
+		killCreature(creature);
+	}
+}
+
+void Aphid::interact(Corpse & creature)
+{
+	if (getPhase() != Creature::KILLING) return;
+	float p = 1;
+	if (roll(p))
 	{
 		killCreature(creature);
 	}

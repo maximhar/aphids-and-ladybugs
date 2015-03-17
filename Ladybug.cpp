@@ -4,6 +4,7 @@
 #include "CreatureInteractor.h"
 #include "LadybugConfiguration.h"
 #include "Aphid.h"
+#include "Corpse.h"
 #include <iostream>
 #include <cmath>
 
@@ -23,9 +24,13 @@ int Ladybug::getDirection()
 	return ((generalDirection + offset) + (getLocation().neighbourCount() - 1)) % (getLocation().neighbourCount() - 1);
 }
 
-void Ladybug::suicide() { getActionHandler().killed(*this, getLocation(), *this); }
+void Ladybug::suicide() 
+{ 
+	getActionHandler().killed(*this, getLocation(), *this); 
+	getActionHandler().reproduced(*this, getLocation(), *this, *(new Corpse(this)));
+}
 
-double Ladybug::eat() { return LadybugConfiguration::get().getFoodPerTurn(); }
+double Ladybug::eat(double initial) { return initial - LadybugConfiguration::get().getFoodPerTurn(); }
 
 double Ladybug::getDefaultNutritionalValue() { return LadybugConfiguration::get().getNutritionalValue(); }
 
@@ -52,6 +57,16 @@ void Ladybug::interact(Ladybug & creature)
 	{
 		Creature * baby = new Ladybug(LadybugConfiguration::get().getLife(), 0);
 		makeBaby(creature, *baby, LadybugConfiguration::get().getStartingFood());
+	}
+}
+
+void Ladybug::interact(Corpse & creature)
+{
+	if (getPhase() != Creature::KILLING) return;
+	float p = 1;
+	if (roll(p))
+	{
+		killCreature(creature);
 	}
 }
 

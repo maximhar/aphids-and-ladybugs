@@ -69,6 +69,7 @@
     <ClInclude Include="Aphid.h" />
     <ClInclude Include="AphidConfiguration.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Corpse.h" />
     <ClInclude Include="CreatureConfiguration.h" />
     <ClInclude Include="CreatureCounter.h" />
     <ClInclude Include="Creature.h" />

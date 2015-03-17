@@ -6,7 +6,7 @@ class Aphid : public Creature, public CreatureInteractor
 {
 protected:
 	void suicide();
-	double eat();
+	double eat(double initial);
 	double getDefaultNutritionalValue();
 	void interactImpl(Creature * creature) { creature->interactWith(*this); }
 	int getDirection();
@@ -15,6 +15,7 @@ public:
 	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);
 	void interact(Ladybug & creature);
+	void interact(Corpse & creature);
 	Aphid(int lifespan, float startFood) : Creature(lifespan, startFood) { }
 };
 

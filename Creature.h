@@ -37,8 +37,9 @@ protected:
 	virtual void move();
 	virtual void kill();
 	virtual void procreate();
+	virtual void survive();
 	virtual void suicide() = 0;
-	virtual double eat() = 0;
+	virtual double eat(double initial) = 0;
 	virtual double getDefaultNutritionalValue() = 0;
 	virtual void interactImpl(Creature * creature) = 0;
 	virtual int getDirection() = 0;
@@ -99,9 +100,7 @@ public:
 	{
 		setPhase(Creature::SURVIVING);
 		initialiseState(handler, location, contents, cellCounter);
-		decreaseLifespan();
-		food -= eat();
-		if (!isAlive() || food < 0) suicide();
+		survive();
 	}
 	virtual void interactWith(CreatureInteractor & creature) = 0;
 	bool getReproduced() { return hasReproduced; }
