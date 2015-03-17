@@ -7,40 +7,43 @@
 #include <cstdlib>
 #include <iostream>
 
-void Aphid::move(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+void Aphid::move()
 {
-	Creature::move(handler, location, contents);
 	float p = AphidConfiguration::get().getMoveProbability();
 	if (roll(p))
 	{
-		int dir = rand() % location.neighbourCount();
-		handler.moved(*this, location, dir);
+		int dir = rand() % getLocation().neighbourCount();
+		getActionHandler().moved(*this, getLocation(), dir);
 	}
 }
 
-void Aphid::kill(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+void Aphid::kill()
 {
-	Creature::kill(handler, location, contents);
-	while (contents->hasNext())
+	while (getContents().hasNext())
 	{
-		auto pair = contents->next();
+		auto pair = getContents().next();
 		if (pair.creature == this) continue;
 		pair.creature->interactWith(*this);
 		break;
 	}
 }
 
-void Aphid::procreate(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+void Aphid::procreate()
 {
-	Creature::procreate(handler, location, contents);
-	while (contents->hasNext())
+	while (getContents().hasNext())
 	{
-		auto pair = contents->next();
+		auto pair = getContents().next();
 		if (pair.creature == this) continue;
 		pair.creature->interactWith(*this);
 		break;
 	}
 }
+
+void Aphid::suicide()
+{
+	getActionHandler().killed(*this, getLocation(), *this);
+}
+
 
 void Aphid::interactWith(CreatureInteractor & creature)
 {
@@ -50,10 +53,14 @@ void Aphid::interactWith(CreatureInteractor & creature)
 void Aphid::interact(Aphid & creature)
 {
 	if (getPhase() != Creature::PROCREATING) return;
+	if (getReproduced()) return;
 	float p = AphidConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
-		getActionHandler().reproduced(*this, getLocation(), creature, *(new Aphid()));
+		CreatureCounter counter = getCounter();
+		getActionHandler().reproduced(*this, getLocation(), creature, *(new Aphid(APHID_LIFE/5 + 4*((APHID_LIFE/5) / (counter.getAphids()-1)))));
+		creature.setReproduced(true);
+		setReproduced(true);
 	}
 }
 
@@ -62,15 +69,8 @@ void Aphid::interact(Ladybug & creature)
 	if (getPhase() != Creature::KILLING) return;
 	float p = AphidConfiguration::get().getKillLadybugProbability();
 	float g = AphidConfiguration::get().getKillLadybugGroupProbability();
-	WorldMap::CreatureIterator * contents = getContents().copy();
-	CreatureCounter counter;
-	contents->reset();
-	while (contents->hasNext())
-	{
-		contents->next().creature->interactWith(counter);
-	}
+	CreatureCounter counter = getCounter();
 	float gn = (counter.getAphids() - 1) * g;
-	delete contents;
 	if (roll(p + gn))
 	{
 		getActionHandler().killed(*this, getLocation(), creature);

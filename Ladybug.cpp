@@ -9,35 +9,37 @@
 ActionHandler * _handler;
 Cell * _location;
 
-void Ladybug::move(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+void Ladybug::move()
 {
-	Creature::move(handler, location, contents);
-	int dir = (rand() % (location.neighbourCount()/2)) * 2;
-	handler.moved(*this, location, dir);
+	int dir = (rand() % (getLocation().neighbourCount()/2)) * 2;
+	getActionHandler().moved(*this, getLocation(), dir);
 }
 
-void Ladybug::kill(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+void Ladybug::kill()
 {
-	Creature::kill(handler, location, contents);
-	while (contents->hasNext())
+	while (getContents().hasNext())
 	{
-		auto pair = contents->next();
+		auto pair = getContents().next();
 		if (pair.creature == this) continue;
 		pair.creature->interactWith(*this);
 		break;
 	}
 }
 
-void Ladybug::procreate(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents)
+void Ladybug::procreate()
 {
-	Creature::procreate(handler, location, contents);
-	while (contents->hasNext())
+	while (getContents().hasNext())
 	{
-		auto pair = contents->next();
+		auto pair = getContents().next();
 		if (pair.creature == this) continue;
 		pair.creature->interactWith(*this);
 		break;
 	}
+}
+
+void Ladybug::suicide()
+{
+	getActionHandler().killed(*this, getLocation(), *this);
 }
 
 void Ladybug::interactWith(CreatureInteractor & creature)
@@ -59,10 +61,12 @@ void Ladybug::interact(Aphid & creature)
 void Ladybug::interact(Ladybug & creature)
 {
 	if (getPhase() != Creature::PROCREATING) return;
+	if (getReproduced()) return;
 	float p = LadybugConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
 		//std::cout << "Ladybug giving birth" << std::endl;
-		getActionHandler().reproduced(*this, getLocation(), creature, *(new Ladybug()));
+		getActionHandler().reproduced(*this, getLocation(), creature, *(new Ladybug(LADYBUG_LIFE)));
 	}
 }
+

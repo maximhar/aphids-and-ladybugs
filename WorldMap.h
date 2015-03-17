@@ -2,7 +2,7 @@
 #include <map>
 #include <set>
 #include <queue>
-class Creature;
+#include "CreatureCounter.h"
 class Cell;
 class WorldMap
 {
@@ -25,10 +25,12 @@ public:
 	};
 private:
 	std::map<Cell *, std::set<Creature *> *> cellCreaturesMap;
+	std::map<Cell *, CreatureCounter> cellCountersMap;
 	std::map<Creature *, Cell *> creatureCellMap;
 	std::queue<CreatureCellPair> additionQueue;
 	std::queue<Creature *> deletionQueue;
 	std::queue<CreatureCellPair> movementQueue;
+	CreatureCounter totalsCounter;
 	bool cellExists(Cell & cell)
 	{
 		return cellCreaturesMap.count(&cell) > 0;
@@ -40,20 +42,22 @@ private:
 		return creatureCellMap.find(&creature)->second;
 	}
 
+	CreatureCounter & getCellCounter(Cell & cell)
+	{
+		return cellCountersMap.find(&cell)->second;
+	}
+
 	void createCellIfNotExists(Cell & cell)
 	{
 		if (!cellExists(cell))
 		{
 			cellCreaturesMap.insert(std::make_pair(&cell, new std::set<Creature *>()));
+			cellCountersMap.insert(std::make_pair(&cell, CreatureCounter()));
 		}
 	}
 
-	void addCreatureToCell(Creature & creature, Cell & cell)
-	{
-		createCellIfNotExists(cell);
-		auto set = cellCreaturesMap.find(&cell)->second;
-		set->insert(&creature);
-	}
+	void addCreatureToCell(Creature & creature, Cell & cell);
+	void deleteCreatureFromCell(Creature & creature, Cell & cell);
 
 	void addCreatureToSet(Creature & creature, Cell & cell)
 	{
@@ -63,12 +67,6 @@ private:
 	bool creatureExists(Creature & creature)
 	{
 		return creatureCellMap.count(&creature) > 0;
-	}
-
-	void deleteCreatureFromCell(Creature & creature, Cell & cell)
-	{
-		auto set = cellCreaturesMap.find(&cell)->second;
-		set->erase(&creature);
 	}
 
 	void deleteCreatureFromSet(Creature & creature)
@@ -81,32 +79,9 @@ private:
 		creatureCellMap.find(&creature)->second = &cell;
 	}
 
-	void flushMovementQueue()
-	{
-		while (!movementQueue.empty())
-		{
-			CreatureCellPair pair = movementQueue.front();
-			if (creatureExists(*pair.creature))
-			{
-				Cell & oldCell = *getCreatureCell(*pair.creature);
-				setCreatureCell(*pair.creature, *pair.cell);
-				deleteCreatureFromCell(*pair.creature, oldCell);
-				addCreatureToCell(*pair.creature, *pair.cell);
-			}
-			movementQueue.pop();
-		}
-	}
+	void flushMovementQueue();
 
-	void flushAdditionQueue()
-	{
-		while (!additionQueue.empty())
-		{
-			CreatureCellPair pair = additionQueue.front();
-			addCreatureToCell(*pair.creature, *pair.cell);
-			addCreatureToSet(*pair.creature, *pair.cell);
-			additionQueue.pop();
-		}
-	}
+	void flushAdditionQueue();
 
 	void flushDeletionQueue();
 
@@ -209,6 +184,15 @@ public:
 		if (!cellExists(cell)) return NULL;
 		auto set = cellCreaturesMap.find(&cell);
 		return new CreatureSetIterator(set->second, set->first);
+	}
+	const CreatureCounter getTotalsCounter()
+	{
+		return totalsCounter;
+	}
+	const CreatureCounter getCounterForCell(Cell & cell)
+	{
+		if (cellExists(cell)) return getCellCounter(cell);
+		else return CreatureCounter();
 	}
 	~WorldMap();
 	

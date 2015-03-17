@@ -34,7 +34,7 @@ World * SquareLoader::load(WorldMap * map, std::istream & is)
 	for (int i = 0; i < aphidCount; i++)
 	{
 		is >> x >> y;
-		Creature * aphid = new Aphid();
+		Creature * aphid = new Aphid(APHID_LIFE);
 		place(map, world, aphid, x, y);
 	}
 
@@ -44,7 +44,7 @@ World * SquareLoader::load(WorldMap * map, std::istream & is)
 	for (int i = 0; i < ladybugCount; i++)
 	{
 		is >> x >> y;
-		Creature * ladybug = new Ladybug();
+		Creature * ladybug = new Ladybug(APHID_LIFE);
 		place(map, world, ladybug, x, y);
 	}
 

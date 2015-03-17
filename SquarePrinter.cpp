@@ -13,23 +13,13 @@ void SquarePrinter::print(WorldMap & map, std::ostream & os)
 	os << "Square World: " << std::endl;
 	Cell * cr = &world->getOrigin();
 	Cell * cc = cr;
-	CreatureCounter counter;
 	while (cr != Cell::EDGE)
 	{
 		while (cc != Cell::EDGE)
 		{
 			os << " ";
 			WorldMap::CreatureIterator * creatures = map.creaturesInCell(*cc);
-			counter.reset();
-			if (creatures != NULL) 
-			{
-				while (creatures->hasNext())
-				{
-					WorldMap::CreatureCellPair pair = creatures->next();
-					pair.creature->interactWith(counter);
-				}
-				delete creatures;
-			}
+			CreatureCounter counter = map.getCounterForCell(*cc);
 			std::stringstream ss;
 			if (counter.getAphids() < 10) ss << counter.getAphids();
 			else ss << "~";

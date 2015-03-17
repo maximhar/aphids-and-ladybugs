@@ -24,11 +24,11 @@ class Manager : public ActionHandler
 private:
 	World * world;
 	WorldMap * worldMap;
+	int turn;
 public:
-	Manager()
+	Manager() : worldMap(new WorldMap()), turn(0)
 	{
 		Loader * loader = new SquareLoader();
-		worldMap = new WorldMap();
 		std::ifstream config("manager.txt");
 		if (!config.is_open()) std::cout << "File is not open...";
 		else
@@ -40,11 +40,13 @@ public:
 	void updateAll()
 	{
 		WorldMap::CreatureIterator * it = worldMap->allCreatures();
+
+		worldMap->flush();
 		while (it->hasNext())
 		{	
 			auto pair = it->next();
 			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->move(*this, *pair.cell, iter);
+			pair.creature->move(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
 			delete iter;
 		}
 		delete it;
@@ -54,7 +56,7 @@ public:
 		{
 			auto pair = it->next();
 			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->kill(*this, *pair.cell, iter);
+			pair.creature->kill(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
 			delete iter;
 		}
 		delete it;
@@ -63,7 +65,16 @@ public:
 		{
 			auto pair = it->next();
 			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->procreate(*this, *pair.cell, iter);
+			pair.creature->procreate(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
+			delete iter;
+		}
+		worldMap->flush();
+		it = worldMap->allCreatures();
+		while (it->hasNext())
+		{
+			auto pair = it->next();
+			auto iter = worldMap->creaturesInCell(*pair.cell);
+			pair.creature->survive(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
 			delete iter;
 		}
 		worldMap->flush();
@@ -72,14 +83,10 @@ public:
 
 	void countAll()
 	{
-		CreatureCounter counter;
-		WorldMap::CreatureIterator *  it = worldMap->allCreatures();
-		while (it->hasNext())
-		{
-			auto pair = it->next();
-			pair.creature->interactWith(counter);
-		}
+		turn++;
+		CreatureCounter counter = worldMap->getTotalsCounter();
 		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << std::endl;
+		std::cout << "Turn: " << turn << std::endl;
 	}
 
 	void run()
@@ -89,8 +96,8 @@ public:
 			world->getPrinter().print(*worldMap, std::cout);
 			countAll();
 			updateAll();
-			std::this_thread::sleep_for(std::chrono::milliseconds(200));
-			//system("CLS");
+			//std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			std::cin.get();
 		}
 	}
 
@@ -114,7 +121,6 @@ public:
 	void killed(Creature& self, Cell& location, Creature& victim)
 	{
 		worldMap->deleteCreature(victim);
-		std::cout << "Creature deleted" << std::endl;
 	}
 
 	void reproduced(Creature& self, Cell& location, Creature& partner, Creature& offspring)
