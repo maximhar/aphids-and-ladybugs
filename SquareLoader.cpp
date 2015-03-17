@@ -3,6 +3,9 @@
 #include "SquareCell.h"
 #include "Aphid.h"
 #include "Ladybug.h"
+#include "AphidConfiguration.h"
+#include "LadybugConfiguration.h"
+#include "CreatureConfiguration.h"
 #include <istream>
 
 void SquareLoader::place(WorldMap * map, SquareWorld * world, Creature * creature, int col, int row)
@@ -34,7 +37,7 @@ World * SquareLoader::load(WorldMap * map, std::istream & is)
 	for (int i = 0; i < aphidCount; i++)
 	{
 		is >> x >> y;
-		Creature * aphid = new Aphid(APHID_LIFE, APHID_START_FOOD);
+		Creature * aphid = new Aphid(AphidConfiguration::get().getLife(), AphidConfiguration::get().getStartingFood());
 		place(map, world, aphid, x, y);
 	}
 
@@ -44,7 +47,7 @@ World * SquareLoader::load(WorldMap * map, std::istream & is)
 	for (int i = 0; i < ladybugCount; i++)
 	{
 		is >> x >> y;
-		Creature * ladybug = new Ladybug(LADYBUG_LIFE, LADYBUG_START_FOOD);
+		Creature * ladybug = new Ladybug(LadybugConfiguration::get().getLife(), LadybugConfiguration::get().getStartingFood());
 		place(map, world, ladybug, x, y);
 	}
 

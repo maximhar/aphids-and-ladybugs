@@ -16,12 +16,16 @@ AphidConfiguration & AphidConfiguration::get()
 AphidConfiguration::AphidConfiguration(char * path)
 {
 	std::ifstream is(path);
-	float move, kill, killGroup, reproduce;
-	is >> move >> kill >> killGroup >> reproduce;
+	float move, kill, killGroup, reproduce, life, nutVal, startFood, foodPerTurn;
+	is >> move >> kill >> killGroup >> reproduce >> life >> nutVal >> startFood >> foodPerTurn;
 	is.close();
 
 	setMoveProbability(move);
 	setKillLadybugProbability(kill);
 	setKillLadybugGroupProbability(killGroup);
 	setReproduceProbability(reproduce);
+	setLife(life);
+	setNutritionalValue(nutVal);
+	setStartingFood(startFood);
+	setFoodPerTurn(foodPerTurn);
 }

@@ -88,6 +88,7 @@
     <ClCompile Include="Aphid.cpp" />
     <ClCompile Include="AphidConfiguration.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Ladybug.cpp" />
     <ClCompile Include="LadybugConfiguration.cpp" />
     <ClCompile Include="Manager.cpp" />

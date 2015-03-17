@@ -16,12 +16,16 @@ LadybugConfiguration & LadybugConfiguration::get()
 LadybugConfiguration::LadybugConfiguration(char * path)
 {
 	 std::ifstream is(path);
-	 float move, change, kill, reproduce;
-	 is >> move >> change >> kill >> reproduce;
+	 float move, change, kill, reproduce, life, nutVal, startFood, foodPerTurn;
+	 is >> move >> change >> kill >> reproduce >> life >> nutVal >> startFood >> foodPerTurn;
 	 is.close();
 
 	 setMoveProbability(move);
 	 setDirectionChangeProbability(change);
 	 setKillAphidProbability(kill);
 	 setReproduceProbability(reproduce);
+	 setLife(life);
+	 setNutritionalValue(nutVal);
+	 setStartingFood(startFood);
+	 setFoodPerTurn(foodPerTurn);
 }

@@ -36,6 +36,7 @@ public:
 		else
 		{
 			world = loader->load(worldMap, config);
+			worldMap->flush();
 		}
 	}
 	
@@ -84,25 +85,26 @@ public:
 		delete it;
 	}
 
-	void countAll()
+	bool countAll()
 	{
 		turn++;
 		CreatureCounter counter = worldMap->getTotalsCounter();
-		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << std::endl;
-		std::cout << "Turn: " << turn << std::endl;
+		//std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << std::endl;
+		//std::cout << "Turn: " << turn << std::endl;
 		os << counter.getAphids() << "," << counter.getLadybugs() << std::endl;
 		os.flush();
+		return counter.getAphids() > 0 || counter.getLadybugs() > 0;
 	}
 
 	void run()
 	{
 		while (true)
 		{
-			world->getPrinter().print(*worldMap, std::cout);
-			countAll();
+			//world->getPrinter().print(*worldMap, std::cout);
+			if (!countAll()) return;
 			updateAll();
 			//std::this_thread::sleep_for(std::chrono::milliseconds(200));
-			std::cin.get();
+			//std::cin.get();
 		}
 	}
 

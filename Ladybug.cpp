@@ -6,6 +6,7 @@
 #include "Aphid.h"
 #include <iostream>
 #include <cmath>
+
 void Ladybug::move()
 {
 	float gp = LadybugConfiguration::get().getDirectionChangeProbability();
@@ -13,49 +14,24 @@ void Ladybug::move()
 	{
 		generalDirection = (rand() % (getLocation().neighbourCount() / 2)) * 2;
 	}
-	float mp = LadybugConfiguration::get().getMoveProbability();
-	if (roll(mp))
-	{
-		int offset = (rand() % 3) - 1;
-		int finDir = ((generalDirection + offset) + (getLocation().neighbourCount()-1)) % (getLocation().neighbourCount()-1);
-		getActionHandler().moved(*this, getLocation(), finDir);
-	}
+	Creature::move();
 }
 
-void Ladybug::kill()
+int Ladybug::getDirection()
 {
-	while (getContents().hasNext())
-	{
-		auto pair = getContents().next();
-		if (pair.creature == this) continue;
-		pair.creature->interactWith(*this);
-		break;
-	}
+	int offset = (rand() % 3) - 1;
+	return ((generalDirection + offset) + (getLocation().neighbourCount() - 1)) % (getLocation().neighbourCount() - 1);
 }
 
-void Ladybug::procreate()
-{
-	while (getContents().hasNext())
-	{
-		auto pair = getContents().next();
-		if (pair.creature == this) continue;
-		if (pair.creature->getReproduced()) continue;
-		pair.creature->interactWith(*this);
-		break;
-	}
-}
+void Ladybug::suicide() { getActionHandler().killed(*this, getLocation(), *this); }
 
-void Ladybug::suicide()
-{
-	getActionHandler().killed(*this, getLocation(), *this);
-}
+float Ladybug::eat() { return LadybugConfiguration::get().getFoodPerTurn(); }
 
-float Ladybug::eat() { return 2; }
+float Ladybug::getDefaultNutritionalValue() { return LadybugConfiguration::get().getNutritionalValue(); }
 
-void Ladybug::interactWith(CreatureInteractor & creature)
-{
-	creature.interact(*this);
-}
+void Ladybug::interactWith(CreatureInteractor & creature) { creature.interact(*this); }
+
+float Ladybug::getMoveProbability() { return LadybugConfiguration::get().getMoveProbability(); }
 
 void Ladybug::interact(Aphid & creature)
 {
@@ -75,9 +51,9 @@ void Ladybug::interact(Ladybug & creature)
 	float p = LadybugConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
-		Creature * baby = new Ladybug((LADYBUG_LIFE / (getCounter().getLadybugs() - 1)), 0);
+		Creature * baby = new Ladybug((LadybugConfiguration::get().getLife() / (getCounter().getLadybugs() - 1)), 0);
 		getActionHandler().reproduced(*this, getLocation(), creature, *baby);
-		giveBabyFood(creature, *baby, LADYBUG_START_FOOD);
+		giveBabyFood(creature, *baby, LadybugConfiguration::get().getStartingFood());
 	}
 }
 

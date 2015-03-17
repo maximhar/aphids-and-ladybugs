@@ -7,51 +7,17 @@
 #include <cstdlib>
 #include <iostream>
 
-void Aphid::move()
-{
-	float p = AphidConfiguration::get().getMoveProbability();
-	if (roll(p))
-	{
-		int dir = rand() % getLocation().neighbourCount();
-		getActionHandler().moved(*this, getLocation(), dir);
-	}
-}
+int Aphid::getDirection() { return rand() % getLocation().neighbourCount(); }
 
-void Aphid::kill()
-{
-	while (getContents().hasNext())
-	{
-		auto pair = getContents().next();
-		if (pair.creature == this) continue;
-		pair.creature->interactWith(*this);
-		break;
-	}
-}
+void Aphid::suicide() { getActionHandler().killed(*this, getLocation(), *this); }
 
-void Aphid::procreate()
-{
-	while (getContents().hasNext())
-	{
-		auto pair = getContents().next();
-		if (pair.creature == this) continue;
-		if (pair.creature->getReproduced()) continue;
-		pair.creature->interactWith(*this);
-		break;
-	}
-}
+float Aphid::eat() { return AphidConfiguration::get().getFoodPerTurn(); }
 
-void Aphid::suicide()
-{
-	getActionHandler().killed(*this, getLocation(), *this);
-}
+float Aphid::getDefaultNutritionalValue() { return AphidConfiguration::get().getNutritionalValue(); }
 
+void Aphid::interactWith(CreatureInteractor & creature) { creature.interact(*this); }
 
-float Aphid::eat() { return 1; }
-
-void Aphid::interactWith(CreatureInteractor & creature)
-{
-	creature.interact(*this);
-}
+float Aphid::getMoveProbability() { return AphidConfiguration::get().getMoveProbability(); }
 
 void Aphid::interact(Aphid & creature)
 {
@@ -61,11 +27,11 @@ void Aphid::interact(Aphid & creature)
 	if (roll(p))
 	{
 		CreatureCounter counter = getCounter();
-		Creature * baby = new Aphid((APHID_LIFE / (counter.getAphids() - 1)), 0);
+		Creature * baby = new Aphid((AphidConfiguration::get().getLife() / (counter.getAphids() - 1)), 0);
 		getActionHandler().reproduced(*this, getLocation(), creature, *baby);
 		creature.setReproduced(true);
 		setReproduced(true);
-		giveBabyFood(creature, *baby, APHID_START_FOOD);
+		giveBabyFood(creature, *baby, AphidConfiguration::get().getStartingFood());
 	}
 }
 

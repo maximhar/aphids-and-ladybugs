@@ -5,5 +5,4 @@ int main(char ** argv, int argc)
 {
 	Manager manager;
 	manager.run();
-	std::cin.get();
 }
