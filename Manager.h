@@ -18,7 +18,7 @@
 #include "WorldMap.h"
 #include "AphidConfiguration.h"
 #include "LadybugConfiguration.h"
-
+#include <time.h>
 class Manager : public ActionHandler
 {
 private:

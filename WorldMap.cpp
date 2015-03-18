@@ -27,7 +27,11 @@ bool WorldMap::deleteCreature(Creature & creature)
 {
 	if (!creatureExists(creature)) return false;
 	deletionQueue.push(&creature);
+	//immense speedup, and doesn't affect actual creatures so it's ok
+	CreatureSorter& sorter = getCellSorter(*getCreatureCell(creature));
 	addChangePending(creature);
+	sorter.setRemoving();
+	creature.interactWith(sorter);
 	return true;
 }
 

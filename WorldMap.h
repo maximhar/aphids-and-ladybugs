@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+#include <unordered_map>
 #include <set>
 #include <queue>
 #include <iostream>
@@ -11,10 +11,10 @@ class Cell;
 class WorldMap
 {
 private:
-	std::map<Cell *, std::set<Creature *> *> cellCreaturesMap;
-	std::map<Cell *, CreatureCounter> cellCountersMap;
-	std::map<Cell *, CreatureSorter *> cellSortersMap;
-	std::map<Creature *, Cell *> creatureCellMap;
+	std::unordered_map<Cell *, std::set<Creature *> *> cellCreaturesMap;
+	std::unordered_map<Cell *, CreatureCounter> cellCountersMap;
+	std::unordered_map<Cell *, CreatureSorter *> cellSortersMap;
+	std::unordered_map<Creature *, Cell *> creatureCellMap;
 	std::queue<CreatureCellPair> additionQueue;
 	std::queue<Creature *> deletionQueue;
 	std::queue<CreatureCellPair> movementQueue;
@@ -93,11 +93,11 @@ private:
 	class CreatureMapIterator : public CreatureIterator
 	{
 	private:
-		std::map<Creature *, Cell *>::const_iterator begin;
-		std::map<Creature *, Cell *>::const_iterator end;
-		std::map<Creature *, Cell *>::const_iterator current;
+		std::unordered_map<Creature *, Cell *>::const_iterator begin;
+		std::unordered_map<Creature *, Cell *>::const_iterator end;
+		std::unordered_map<Creature *, Cell *>::const_iterator current;
 	public:
-		CreatureMapIterator(std::map<Creature *, Cell *> * creatures)
+		CreatureMapIterator(std::unordered_map<Creature *, Cell *> * creatures)
 			: begin(creatures->begin()), end(creatures->end())
 		{
 			current = begin;
@@ -160,8 +160,8 @@ private:
 
 public:
 	WorldMap() :
-		cellCreaturesMap(std::map<Cell *, std::set<Creature *> *>()),
-		creatureCellMap(std::map<Creature *, Cell *>())
+		cellCreaturesMap(std::unordered_map<Cell *, std::set<Creature *> *>()),
+		creatureCellMap(std::unordered_map<Creature *, Cell *>())
 	{
 	}
 	bool deleteCreature(Creature & creature);

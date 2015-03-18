@@ -58,7 +58,6 @@ void Creature::killCreature(Creature & creature)
 	creature.food = 0;
 	getActionHandler().killed(*this, getLocation(), creature);
 	hasKilled = true;
-	std::cout << getName() << " killed " << creature.getName() << std::endl;
 }
 void Creature::makeBaby(Creature & parent, Creature & baby)
 {
