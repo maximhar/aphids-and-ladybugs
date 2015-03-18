@@ -56,10 +56,6 @@ void Ladybug::interact(Ladybug & creature)
 void Ladybug::interact(Corpse & creature)
 {
 	if (getPhase() != Creature::KILLING) return;
-	float p = 1;
-	if (roll(p))
-	{
-		killCreature(creature);
-	}
+	killCreature(creature);
 }
 
