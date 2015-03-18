@@ -114,7 +114,6 @@ private:
 			return new CreatureMapIterator(*this);
 		}
 	};
-
 	class CreatureSetIterator : public CreatureIterator
 	{
 	private:

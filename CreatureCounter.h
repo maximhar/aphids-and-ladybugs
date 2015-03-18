@@ -21,7 +21,7 @@ public:
 		if (decrementing) aphids--; 
 		else aphids++;
 	}
-	void interact(Corpse & aphid)
+	void interact(Corpse & corpse)
 	{
 		if (decrementing) corpses--;
 		else corpses++;
