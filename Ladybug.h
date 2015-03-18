@@ -13,6 +13,7 @@ protected:
 	void makeInteractWith(Creature * creature) { creature->interactWith(*this); }
 	int getDirection();
 	double getMoveProbability();
+	char * getName() { return "Ladybug"; }
 public:
 	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);

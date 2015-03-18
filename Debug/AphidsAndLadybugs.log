@@ -1,21 +1,8 @@
-﻿Build started 18/03/2015 11:39:20.
+﻿Build started 18/03/2015 16:27:19.
      1>Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _HAS_ITERATOR_DEBUGGING=0 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp Cell.cpp Creature.cpp Ladybug.cpp Run.cpp SquareCell.h SquareLoader.cpp SquarePrinter.cpp SquareWorld.cpp WorldMap.cpp
-         WorldMap.cpp
-         Creature.cpp
-     1>c:\users\maximhar\documents\visual studio 2013\projects\aphidsandladybugs\aphidsandladybugs\creature.cpp(7): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
-         SquareWorld.cpp
-         SquarePrinter.cpp
-         SquareLoader.cpp
-         SquareCell.h
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _HAS_ITERATOR_DEBUGGING=0 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Run.cpp
          Run.cpp
-         Ladybug.cpp
-         Cell.cpp
-         Aphid.cpp
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\Debug\AphidsAndLadybugs.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\Debug\AphidsAndLadybugs.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\Debug\AphidsAndLadybugs.lib" /MACHINE:X86 Debug\Aphid.obj
          Debug\AphidConfiguration.obj
@@ -35,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.91
+Time Elapsed 00:00:00.88

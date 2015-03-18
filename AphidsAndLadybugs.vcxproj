@@ -70,10 +70,12 @@
     <ClInclude Include="AphidConfiguration.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Corpse.h" />
+    <ClInclude Include="CreatureCellPair.h" />
     <ClInclude Include="CreatureConfiguration.h" />
     <ClInclude Include="CreatureCounter.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="CreatureInteractor.h" />
+    <ClInclude Include="CreatureIterator.h" />
     <ClInclude Include="Ladybug.h" />
     <ClInclude Include="LadybugConfiguration.h" />
     <ClInclude Include="Loader.h" />

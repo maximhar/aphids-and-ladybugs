@@ -1,7 +1,6 @@
 #include "Creature.h"
 #include "Corpse.h"
 #include "ActionHandler.h"
-
 void Creature::move()
 {
 	float p = getMoveProbability();
@@ -13,32 +12,37 @@ void Creature::move()
 }
 void Creature::kill()
 {
-	while (getContents().hasNext())
+	CreatureIterator & contents = getActionHandler().getContentsIterator(getLocation());
+	while (contents.hasNext())
 	{
-		auto pair = getContents().next();
+		auto pair = contents.next();
 		if (pair.creature == this) continue;
 		if (!handler->canChange(*pair.creature)) continue;
 		makeInteractWith(pair.creature);
 		if (hasKilled) break;
 	}
+	getActionHandler().destroyContentsIterator(contents);
 }
 void Creature::procreate()
 {
-	while (getContents().hasNext())
+	CreatureIterator & contents = getActionHandler().getContentsIterator(getLocation());
+	while (contents.hasNext())
 	{
-		auto pair = getContents().next();
+		auto pair = contents.next();
 		if (pair.creature == this) continue;
+		if (!handler->canChange(*pair.creature)) continue;
 		if (pair.creature->hasReproduced) continue;
 		makeInteractWith(pair.creature);
 		if (hasReproduced) break;
 	}
+	getActionHandler().destroyContentsIterator(contents);
 }
 
 void Creature::survive()
 {
 	lifespan--;
 	food = eat(food);
-	if (lifespan < 0 || food < 0) suicide();
+	if (lifespan <= 0 || food <= 0) suicide();
 }
 
 void Creature::suicide()

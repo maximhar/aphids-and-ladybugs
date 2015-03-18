@@ -6,6 +6,7 @@
 #include <cmath>
 #include "WorldMap.h"
 #include "CreatureCounter.h"
+#include "ActionHandler.h"
 class Manager;
 class Aphid;
 class Ladybug;
@@ -19,8 +20,6 @@ class Creature
 private:
 	ActionHandler * handler;
 	Cell * location;
-	WorldMap::CreatureIterator * contents;
-	CreatureCounter counter;
 	bool hasReproduced;
 	bool hasKilled;
 	int lifespan;
@@ -30,7 +29,6 @@ protected:
 	Phase getPhase() { return phase; }
 	ActionHandler & getActionHandler() { return *handler; }
 	Cell & getLocation() { return *location; }
-	WorldMap::CreatureIterator & getContents() { return *contents; }
 	void makeBaby(Creature & parent, Creature & baby);
 	virtual void move();
 	virtual void kill();
@@ -42,8 +40,8 @@ protected:
 	virtual void makeInteractWith(Creature * creature) = 0;
 	virtual int getDirection() = 0;
 	virtual double getMoveProbability() = 0;
+	virtual char * getName() = 0;
 	void killCreature(Creature & creature);
-	CreatureCounter getCounter() { return counter; }
 	bool roll(float p)
 	{
 		float r = (rand() % 100) / 100.0f;
@@ -58,12 +56,10 @@ protected:
 		otherParent.food -= food2;
 		food -= food1;
 	}
-	void initialiseState(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents, CreatureCounter cellCounter)
+	void initialiseState(ActionHandler & handler, Cell & location)
 	{
 		this->handler = &handler;
 		this->location = &location;
-		this->contents = contents;
-		this->counter = cellCounter;
 	}
 private:
 	Phase phase;
@@ -72,31 +68,33 @@ public:
 		hasReproduced(false), lifespan(lifespan), food(startFood)
 	{
 	}
-	void move(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents, CreatureCounter cellCounter)
+	void move(ActionHandler & handler, Cell & location)
 	{
 		phase = Creature::MOVING;
-		initialiseState(handler, location, contents, cellCounter);
+		if (!handler.canChange(*this)) return;
+		initialiseState(handler, location);
 		hasReproduced = false;
 		hasKilled = false;
 		move();
 	}
-	void kill(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents, CreatureCounter cellCounter)
+	void kill(ActionHandler & handler, Cell & location)
 	{
 		phase = Creature::KILLING;
-		initialiseState(handler, location, contents, cellCounter);
+		if (!handler.canChange(*this)) return; 
+		initialiseState(handler, location);
 		kill();
 	}
-	void procreate(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents, CreatureCounter cellCounter)
+	void procreate(ActionHandler & handler, Cell & location)
 	{
 		phase = Creature::PROCREATING;
-		initialiseState(handler, location, contents, cellCounter);
+		initialiseState(handler, location);
 		if (hasReproduced) return;
 		procreate();
 	}
-	virtual void survive(ActionHandler & handler, Cell & location, WorldMap::CreatureIterator * contents, CreatureCounter cellCounter)
+	virtual void survive(ActionHandler & handler, Cell & location)
 	{
 		phase = Creature::SURVIVING;
-		initialiseState(handler, location, contents, cellCounter);
+		initialiseState(handler, location);
 		survive();
 	}
 	virtual void interactWith(CreatureInteractor & creature) = 0;

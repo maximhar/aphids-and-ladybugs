@@ -2,27 +2,13 @@
 #include <map>
 #include <set>
 #include <queue>
+#include <iostream>
 #include "CreatureCounter.h"
+#include "CreatureIterator.h"
+#include "CreatureCellPair.h"
 class Cell;
 class WorldMap
 {
-public:
-	struct CreatureCellPair
-	{
-		Cell * cell;
-		Creature * creature;
-		CreatureCellPair(Cell * ce, Creature * cr)
-			: cell(ce), creature(cr)
-		{}
-	};
-	class CreatureIterator
-	{
-	public:
-		virtual bool hasNext() = 0;
-		virtual CreatureCellPair next() = 0;
-		virtual void reset() = 0;
-		virtual CreatureIterator * copy() = 0;
-	};
 private:
 	std::map<Cell *, std::set<Creature *> *> cellCreaturesMap;
 	std::map<Cell *, CreatureCounter> cellCountersMap;
@@ -179,6 +165,7 @@ public:
 	void moveCreature(Creature & creature, Cell & newCell)
 	{
 		movementQueue.push(CreatureCellPair(&newCell, &creature));
+		addChangePending(creature);
 	}
 	void flush()
 	{
@@ -207,6 +194,7 @@ public:
 	}
 	bool changePending(Creature & creature)
 	{
+		//TODO: problem  here
 		return changePendingSet.count(&creature) > 0;
 	}
 	~WorldMap();

@@ -34,13 +34,11 @@ public:
 	
 	void updateAll()
 	{
-		WorldMap::CreatureIterator * it = worldMap->allCreatures();
+		CreatureIterator * it = worldMap->allCreatures();
 		while (it->hasNext())
 		{	
 			auto pair = it->next();
-			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->move(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
-			delete iter;
+			pair.creature->move(*this, *pair.cell);
 		}
 		delete it;
 		worldMap->flush();
@@ -48,27 +46,23 @@ public:
 		while (it->hasNext())
 		{
 			auto pair = it->next();
-			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->kill(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
-			delete iter;
+			pair.creature->kill(*this, *pair.cell);
 		}
+		worldMap->flush();
 		delete it;
 		it = worldMap->allCreatures();
 		while (it->hasNext())
 		{
 			auto pair = it->next();
-			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->procreate(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
-			delete iter;
+			pair.creature->procreate(*this, *pair.cell);
 		}
+		worldMap->flush();
 		delete it;
 		it = worldMap->allCreatures();
 		while (it->hasNext())
 		{
 			auto pair = it->next();
-			auto iter = worldMap->creaturesInCell(*pair.cell);
-			pair.creature->survive(*this, *pair.cell, iter, worldMap->getCounterForCell(*pair.cell));
-			delete iter;
+			pair.creature->survive(*this, *pair.cell);
 		}
 		worldMap->flush();
 		delete it;
@@ -142,9 +136,24 @@ public:
 		worldMap->addCreature(offspring, location);
 	}
 
+	void destroyContentsIterator(CreatureIterator & iter)
+	{
+		delete &iter;
+	}
+
+	CreatureIterator & getContentsIterator(Cell & loc)
+	{
+		return *worldMap->creaturesInCell(loc);
+	}
+
+	CreatureCounter getCounter(Cell & loc)
+	{
+		return worldMap->getCounterForCell(loc);
+	}
+
 	bool canChange(Creature & creature)
 	{
-		return worldMap->changePending(creature);
+		return !worldMap->changePending(creature);
 	}
 
 	~Manager()

@@ -113,5 +113,11 @@
     <ClInclude Include="Corpse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CreatureIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatureCellPair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

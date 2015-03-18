@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Cell.h"
-#include <exception>
 #include <cstring>
 
 class SquareCell : public Cell 
@@ -27,7 +26,7 @@ public:
 
 	SquareCell()
 	{
-		memset(neighbours, (int)Cell::EDGE, sizeof(Cell *) * (last + 1));
+		std::memset(neighbours, (int)Cell::EDGE, sizeof(Cell *) * (last + 1));
 	}
 
 	virtual int neighbourCount() { return last + 1; }

@@ -17,6 +17,7 @@ protected:
 		Creature::survive();
 		if (getNutritionalValue() < 0.1) suicide();
 	}
+	char * getName() { return "Corpse"; }
 public:
 	Corpse::Corpse(Creature * from) : Creature(1000, from->getNutritionalValue())
 	{

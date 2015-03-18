@@ -21,6 +21,7 @@ bool WorldMap::deleteCreature(Creature & creature)
 {
 	if (!creatureExists(creature)) return false;
 	deletionQueue.push(&creature);
+	addChangePending(creature);
 	return true;
 }
 
@@ -39,7 +40,6 @@ void WorldMap::flushDeletionQueue()
 			removeChangePending(*cr);
 			delete cr;
 		}
-		else std::cout << "Creature not found..." << std::endl;
 		deletionQueue.pop();
 	}
 }
@@ -56,7 +56,7 @@ void WorldMap::flushMovementQueue()
 			deleteCreatureFromCell(*pair.creature, oldCell);
 			addCreatureToCell(*pair.creature, *pair.cell);
 			removeChangePending(*pair.creature);
-		} else std::cout << "Creature to move not found..." << std::endl;
+		}
 		movementQueue.pop();
 	}
 }
