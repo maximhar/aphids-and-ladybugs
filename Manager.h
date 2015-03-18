@@ -1,10 +1,13 @@
 #pragma once
 
 #include <iostream>
-#include <map>
 #include <utility>
 #include <fstream>
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include <cmath>
+#include <iomanip>
 #include "Creature.h"
 #include "World.h"
 #include "SquareWorld.h"
@@ -13,12 +16,8 @@
 #include "ActionHandler.h"
 #include "CreatureCounter.h"
 #include "WorldMap.h"
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
-#include <set>
-#include <iomanip>
+#include "AphidConfiguration.h"
+#include "LadybugConfiguration.h"
 
 class Manager : public ActionHandler
 {
@@ -30,16 +29,7 @@ private:
 public:
 	Manager() : worldMap(new WorldMap()), turn(0)
 	{
-		Loader * loader = new SquareLoader();
-		std::ifstream config("manager.txt");
-		os = std::ofstream("graph.csv");
-		if (!os.is_open()) std::cout << "Graph file is not open...";
-		if (!config.is_open()) std::cout << "World config is not open...";
-		else
-		{
-			world = loader->load(worldMap, config);
-			worldMap->flush();
-		}
+
 	}
 	
 	void updateAll()
@@ -102,6 +92,20 @@ public:
 
 	void run()
 	{
+		Loader * loader = new SquareLoader();
+		std::ifstream config("manager.txt");
+		os = std::ofstream("graph.csv");
+		if (!os.is_open()) std::cout << "Graph file is not open...";
+		if (!config.is_open()) std::cout << "World config is not open...";
+		else
+		{
+			world = loader->load(worldMap, config);
+			worldMap->flush();
+		}
+
+		AphidConfiguration::get().printConfiguration();
+		LadybugConfiguration::get().printConfiguration();
+		std::cin.get();
 		while (true)
 		{
 			//world->getPrinter().print(*worldMap, std::cout);

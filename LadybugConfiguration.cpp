@@ -8,24 +8,21 @@ LadybugConfiguration & LadybugConfiguration::get()
 {
 	if (config == NULL)
 	{
-		config = new LadybugConfiguration(LADYBUG_CONFIG);
+		config = new LadybugConfiguration(LADYBUG_CONFIG, LADYBUG_EXTRA_CONFIG);
 	}
 	return *config;
 }
 
-LadybugConfiguration::LadybugConfiguration(char * path)
+LadybugConfiguration::LadybugConfiguration(char * path, char * extra)
 {
-	 std::ifstream is(path);
-	 float move, change, kill, reproduce, life, nutVal, startFood, foodPerTurn;
-	 is >> move >> change >> kill >> reproduce >> life >> nutVal >> startFood >> foodPerTurn;
-	 is.close();
+	readExtraConfiguration(extra);
+	std::ifstream is(path);
+	float move = 0.7, change = 0.2, kill = 0.4, reproduce = 0.2;
+	is >> move >> change >> kill >> reproduce;
+	is.close();
 
-	 setMoveProbability(move);
-	 setDirectionChangeProbability(change);
-	 setKillAphidProbability(kill);
-	 setReproduceProbability(reproduce);
-	 setLife(life);
-	 setNutritionalValue(nutVal);
-	 setStartingFood(startFood);
-	 setFoodPerTurn(foodPerTurn);
+	setMoveProbability(move);
+	setDirectionChangeProbability(change);
+	setKillAphidProbability(kill);
+	setReproduceProbability(reproduce);
 }
