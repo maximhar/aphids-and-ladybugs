@@ -24,12 +24,6 @@ int Ladybug::getDirection()
 	return ((generalDirection + offset) + (getLocation().neighbourCount() - 1)) % (getLocation().neighbourCount() - 1);
 }
 
-void Ladybug::suicide() 
-{ 
-	getActionHandler().killed(*this, getLocation(), *this); 
-	getActionHandler().reproduced(*this, getLocation(), *this, *(new Corpse(this)));
-}
-
 double Ladybug::eat(double initial) { return initial - LadybugConfiguration::get().getFoodPerTurn(); }
 
 double Ladybug::getDefaultNutritionalValue() { return LadybugConfiguration::get().getNutritionalValue(); }
@@ -51,12 +45,11 @@ void Ladybug::interact(Aphid & creature)
 void Ladybug::interact(Ladybug & creature)
 {
 	if (getPhase() != Creature::PROCREATING) return;
-	if (getReproduced()) return;
 	float p = LadybugConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
 		Creature * baby = new Ladybug(LadybugConfiguration::get().getLife(), 0);
-		makeBaby(creature, *baby, LadybugConfiguration::get().getStartingFood());
+		makeBaby(creature, *baby);
 	}
 }
 

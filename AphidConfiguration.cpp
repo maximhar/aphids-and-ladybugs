@@ -17,7 +17,7 @@ AphidConfiguration::AphidConfiguration(char * path, char * extra)
 {
 	readExtraConfiguration(extra);
 	std::ifstream is(path);
-	float move = 0.7, kill = 0.2, killGroup = 0.1, reproduce = 0.8;
+	float move = 0.7f, kill = 0.2f, killGroup = 0.1f, reproduce = 0.8f;
 	if (is.is_open())
 	{
 		is >> move >> kill >> killGroup >> reproduce;

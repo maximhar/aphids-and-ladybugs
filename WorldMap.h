@@ -30,7 +30,18 @@ private:
 	std::queue<CreatureCellPair> additionQueue;
 	std::queue<Creature *> deletionQueue;
 	std::queue<CreatureCellPair> movementQueue;
+	std::set<Creature *> changePendingSet;
 	CreatureCounter totalsCounter;
+	void addChangePending(Creature & creature)
+	{
+		changePendingSet.insert(&creature);
+	}
+
+	void removeChangePending(Creature & creature)
+	{
+		changePendingSet.erase(&creature);
+	}
+
 	bool cellExists(Cell & cell)
 	{
 		return cellCreaturesMap.count(&cell) > 0;
@@ -193,6 +204,10 @@ public:
 	{
 		if (cellExists(cell)) return getCellCounter(cell);
 		else return CreatureCounter();
+	}
+	bool changePending(Creature & creature)
+	{
+		return changePendingSet.count(&creature) > 0;
 	}
 	~WorldMap();
 	

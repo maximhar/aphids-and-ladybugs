@@ -21,7 +21,8 @@ protected:
 	void readExtraConfiguration(char * path)
 	{
 		std::ifstream is(path);
-		float life = 1000, nutVal = 0, startFood = 1, foodPerTurn = 0;
+		int life = 1000;
+		float nutVal = 0, startFood = 1, foodPerTurn = 0;
 		is >> life >> nutVal >> startFood >> foodPerTurn;
 		is.close();
 

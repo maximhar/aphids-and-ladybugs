@@ -17,7 +17,7 @@ LadybugConfiguration::LadybugConfiguration(char * path, char * extra)
 {
 	readExtraConfiguration(extra);
 	std::ifstream is(path);
-	float move = 0.7, change = 0.2, kill = 0.4, reproduce = 0.2;
+	float move = 0.7f, change = 0.2f, kill = 0.4f, reproduce = 0.2f;
 	is >> move >> change >> kill >> reproduce;
 	is.close();
 

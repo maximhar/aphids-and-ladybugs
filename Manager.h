@@ -108,11 +108,11 @@ public:
 		std::cin.get();
 		while (true)
 		{
-			//world->getPrinter().print(*worldMap, std::cout);
 			updateAll();
+			world->getPrinter().print(*worldMap, std::cout);
 			if (!countAll()) return;
 			//std::this_thread::sleep_for(std::chrono::milliseconds(200));
-			//std::cin.get();
+			std::cin.get();
 		}
 	}
 
@@ -140,6 +140,11 @@ public:
 	void reproduced(Creature& self, Cell& location, Creature& partner, Creature& offspring)
 	{
 		worldMap->addCreature(offspring, location);
+	}
+
+	bool canChange(Creature & creature)
+	{
+		return worldMap->changePending(creature);
 	}
 
 	~Manager()

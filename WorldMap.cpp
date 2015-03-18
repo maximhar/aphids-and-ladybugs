@@ -1,5 +1,6 @@
 #include "WorldMap.h"
 #include "Creature.h"
+#include <iostream>
 WorldMap::~WorldMap() 
 {
 	auto mapBegin = cellCreaturesMap.begin();
@@ -35,8 +36,10 @@ void WorldMap::flushDeletionQueue()
 			Cell * cell = getCreatureCell(*cr);
 			deleteCreatureFromCell(*cr, *cell);
 			deleteCreatureFromSet(*cr);
+			removeChangePending(*cr);
 			delete cr;
 		}
+		else std::cout << "Creature not found..." << std::endl;
 		deletionQueue.pop();
 	}
 }
@@ -52,7 +55,8 @@ void WorldMap::flushMovementQueue()
 			setCreatureCell(*pair.creature, *pair.cell);
 			deleteCreatureFromCell(*pair.creature, oldCell);
 			addCreatureToCell(*pair.creature, *pair.cell);
-		}
+			removeChangePending(*pair.creature);
+		} else std::cout << "Creature to move not found..." << std::endl;
 		movementQueue.pop();
 	}
 }

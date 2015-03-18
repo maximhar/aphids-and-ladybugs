@@ -1,5 +1,6 @@
 #pragma once
 #include "Creature.h"
+#include "ActionHandler.h"
 class Corpse :
 	public Creature
 {
@@ -7,7 +8,7 @@ protected:
 	void suicide() { getActionHandler().killed(*this, getLocation(), *this);  }
 	double eat(double initial) { return initial * 0.95; }
 	double getDefaultNutritionalValue() { return 0; }
-	void interactImpl(Creature * creature) { }
+	void makeInteractWith(Creature * creature) { }
 	int getDirection() { return 0; }
 	double getMoveProbability() { return 0; }
 	void interactWith(CreatureInteractor & creature) { creature.interact(*this); }

@@ -10,12 +10,6 @@
 
 int Aphid::getDirection() { return rand() % getLocation().neighbourCount(); }
 
-void Aphid::suicide() 
-{ 
-	getActionHandler().killed(*this, getLocation(), *this); 
-	getActionHandler().reproduced(*this, getLocation(), *this, *(new Corpse(this)));
-}
-
 double Aphid::eat(double initial) { return initial - AphidConfiguration::get().getFoodPerTurn(); }
 
 double Aphid::getDefaultNutritionalValue() { return AphidConfiguration::get().getNutritionalValue(); }
@@ -27,12 +21,11 @@ double Aphid::getMoveProbability() { return AphidConfiguration::get().getMovePro
 void Aphid::interact(Aphid & creature)
 {
 	if (getPhase() != Creature::PROCREATING) return;
-	if (getReproduced()) return;
 	float p = AphidConfiguration::get().getReproduceProbability();
 	if (roll(p))
 	{
 		Creature * baby = new Aphid(AphidConfiguration::get().getLife(), 0);
-		makeBaby(creature, *baby, AphidConfiguration::get().getStartingFood());
+		makeBaby(creature, *baby);
 	}
 }
 

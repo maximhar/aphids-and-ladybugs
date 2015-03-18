@@ -8,10 +8,9 @@ private:
 	int generalDirection;
 protected:
 	void move();
-	void suicide();
 	double eat(double initial);
 	double getDefaultNutritionalValue();
-	void interactImpl(Creature * creature) { creature->interactWith(*this); }
+	void makeInteractWith(Creature * creature) { creature->interactWith(*this); }
 	int getDirection();
 	double getMoveProbability();
 public:
