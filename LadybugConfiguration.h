@@ -1,6 +1,7 @@
 #pragma once
 #include "CreatureConfiguration.h"
 #define LADYBUG_CONFIG "Ladybug.txt"
+#define LADYBUG_EXTRA_CONFIG "Ladybug_Extra.txt"
 class LadybugConfiguration : public CreatureConfiguration
 {
 private:

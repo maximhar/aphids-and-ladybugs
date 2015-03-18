@@ -16,6 +16,10 @@ protected:
 	void setNutritionalValue(float p) { nutritionalValue = p; }
 	void setFoodPerTurn(float p) { foodPerTurn = p; }
 	void setLife(int p) { life = p; }
+	void readExtraConfiguration(char * path)
+	{
+
+	}
 public:
 	float getMoveProbability() { return pMove; }
 	float getReproduceProbability() { return pReproduce; }

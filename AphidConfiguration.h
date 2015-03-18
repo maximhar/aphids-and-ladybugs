@@ -1,6 +1,7 @@
 #pragma once
 #include "CreatureConfiguration.h"
 #define APHID_CONFIG "Aphid.txt"
+#define APHID_EXTRA_CONFIG "Aphid_Extra.txt"
 class AphidConfiguration : public CreatureConfiguration
 {
 private:
