@@ -151,6 +151,13 @@ public:
 		return worldMap->getCounterForCell(loc);
 	}
 
+	CreatureSorter & getSorter(Cell & loc)
+	{
+		CreatureSorter & sorter = worldMap->getSorterForCell(loc);
+		sorter.begin();
+		return sorter;
+	}
+
 	bool canChange(Creature & creature)
 	{
 		return !worldMap->changePending(creature);

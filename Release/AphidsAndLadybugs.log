@@ -1,12 +1,14 @@
-﻿Build started 18/03/2015 16:27:42.
+﻿Build started 18/03/2015 19:03:05.
      1>Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp Cell.cpp Creature.cpp Ladybug.cpp Run.cpp SquareCell.h SquareLoader.cpp SquarePrinter.cpp SquareWorld.cpp WorldMap.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp Cell.cpp Creature.cpp FoePicker.cpp Ladybug.cpp MatePicker.cpp Run.cpp SquareCell.h SquareLoader.cpp SquarePrinter.cpp SquareWorld.cpp WorldMap.cpp
          Aphid.cpp
          Cell.cpp
          Creature.cpp
-     1>Creature.cpp(6): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>Creature.cpp(7): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         FoePicker.cpp
          Ladybug.cpp
+         MatePicker.cpp
          Run.cpp
          SquareCell.h
          SquareLoader.cpp
@@ -18,9 +20,11 @@
          Release\AphidConfiguration.obj
          Release\Cell.obj
          Release\Creature.obj
+         Release\FoePicker.obj
          Release\Ladybug.obj
          Release\LadybugConfiguration.obj
          Release\Manager.obj
+         Release\MatePicker.obj
          Release\Run.obj
          Release\SquareCell.obj
          Release\SquareLoader.obj
@@ -34,4 +38,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.59
+Time Elapsed 00:00:08.84

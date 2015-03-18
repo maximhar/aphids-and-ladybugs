@@ -15,6 +15,12 @@ WorldMap::~WorldMap()
 		}
 		delete it->second;
 	}
+	auto setBegin = cellSortersMap.begin();
+	auto setEnd = cellSortersMap.end();
+	for (auto it = mapBegin; it != mapEnd; ++it)
+	{
+		delete it->second;
+	}
 }
 
 bool WorldMap::deleteCreature(Creature & creature)
@@ -79,15 +85,21 @@ void WorldMap::addCreatureToCell(Creature & creature, Cell & cell)
 	createCellIfNotExists(cell);
 	auto set = cellCreaturesMap.find(&cell)->second;
 	set->insert(&creature);
-	CreatureCounter & counter = cellCountersMap.find(&cell)->second;
+	CreatureCounter & counter = getCellCounter(cell);
+	CreatureSorter & sorter = getCellSorter(cell);
 	counter.setIncrementing();
+	sorter.setAdding();
 	creature.interactWith(counter);
+	creature.interactWith(sorter);
 }
 void WorldMap::deleteCreatureFromCell(Creature & creature, Cell & cell)
 {
 	auto set = cellCreaturesMap.find(&cell)->second;
 	set->erase(&creature);
-	CreatureCounter & counter = cellCountersMap.find(&cell)->second;
+	CreatureCounter & counter = getCellCounter(cell);
+	CreatureSorter & sorter = getCellSorter(cell);
 	counter.setDecrementing();
+	sorter.setRemoving();
 	creature.interactWith(counter);
+	creature.interactWith(sorter);
 }

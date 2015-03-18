@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Creature.h"
 #include "Corpse.h"
 #include "ActionHandler.h"
@@ -12,30 +13,30 @@ void Creature::move()
 }
 void Creature::kill()
 {
-	CreatureIterator & contents = getActionHandler().getContentsIterator(getLocation());
-	while (contents.hasNext())
+	Creature * current;
+	FoePicker picker;
+	CreatureSorter & sorter = handler->getSorter(*location);
+	while ((current = pick(picker, sorter)) != NULL)
 	{
-		auto pair = contents.next();
-		if (pair.creature == this) continue;
-		if (!handler->canChange(*pair.creature)) continue;
-		makeInteractWith(pair.creature);
-		if (hasKilled) break;
+		if (current == this) continue;
+		if (!handler->canChange(*current)) continue;
+		makeInteractWith(current);
+		break;
 	}
-	getActionHandler().destroyContentsIterator(contents);
 }
 void Creature::procreate()
 {
-	CreatureIterator & contents = getActionHandler().getContentsIterator(getLocation());
-	while (contents.hasNext())
+	Creature * current;
+	MatePicker picker;
+	CreatureSorter & sorter = handler->getSorter(*location);
+	while ((current = pick(picker, sorter)) != NULL)
 	{
-		auto pair = contents.next();
-		if (pair.creature == this) continue;
-		if (!handler->canChange(*pair.creature)) continue;
-		if (pair.creature->hasReproduced) continue;
-		makeInteractWith(pair.creature);
-		if (hasReproduced) break;
+		if (current == this) continue;
+		if (!handler->canChange(*current)) continue;
+		if (current->hasReproduced) continue;
+		makeInteractWith(current);
+		break;
 	}
-	getActionHandler().destroyContentsIterator(contents);
 }
 
 void Creature::survive()
@@ -57,6 +58,7 @@ void Creature::killCreature(Creature & creature)
 	creature.food = 0;
 	getActionHandler().killed(*this, getLocation(), creature);
 	hasKilled = true;
+	std::cout << getName() << " killed " << creature.getName() << std::endl;
 }
 void Creature::makeBaby(Creature & parent, Creature & baby)
 {

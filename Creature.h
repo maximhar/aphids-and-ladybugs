@@ -6,7 +6,11 @@
 #include <cmath>
 #include "WorldMap.h"
 #include "CreatureCounter.h"
+#include "CreaturePicker.h"
 #include "ActionHandler.h"
+#include "CreaturePicker.h"
+#include "FoePicker.h"
+#include "MatePicker.h"
 class Manager;
 class Aphid;
 class Ladybug;
@@ -35,6 +39,7 @@ protected:
 	virtual void procreate();
 	virtual void survive();
 	virtual void suicide();
+	virtual Creature * pick(CreaturePicker & picker, CreatureSorter & sorter) = 0;
 	virtual double eat(double initial) = 0;
 	virtual double getDefaultNutritionalValue() = 0;
 	virtual void makeInteractWith(Creature * creature) = 0;

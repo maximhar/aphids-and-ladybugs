@@ -5,6 +5,8 @@
 #include "AphidConfiguration.h"
 #include "Ladybug.h"
 #include "Corpse.h"
+#include "FoePicker.h"
+#include "MatePicker.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -17,6 +19,11 @@ double Aphid::getDefaultNutritionalValue() { return AphidConfiguration::get().ge
 void Aphid::interactWith(CreatureInteractor & creature) { creature.interact(*this); }
 
 double Aphid::getMoveProbability() { return AphidConfiguration::get().getMoveProbability(); }
+
+Creature * Aphid::pick(CreaturePicker & picker, CreatureSorter & sorter) 
+{
+	return picker.pick(sorter, *this);
+}
 
 void Aphid::interact(Aphid & creature)
 {

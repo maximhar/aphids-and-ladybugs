@@ -76,10 +76,14 @@
     <ClInclude Include="Creature.h" />
     <ClInclude Include="CreatureInteractor.h" />
     <ClInclude Include="CreatureIterator.h" />
+    <ClInclude Include="CreaturePicker.h" />
+    <ClInclude Include="CreatureSorter.h" />
+    <ClInclude Include="FoePicker.h" />
     <ClInclude Include="Ladybug.h" />
     <ClInclude Include="LadybugConfiguration.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="MatePicker.h" />
     <ClInclude Include="Printer.h" />
     <ClInclude Include="SquareLoader.h" />
     <ClInclude Include="SquarePrinter.h" />
@@ -92,9 +96,11 @@
     <ClCompile Include="AphidConfiguration.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="FoePicker.cpp" />
     <ClCompile Include="Ladybug.cpp" />
     <ClCompile Include="LadybugConfiguration.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="MatePicker.cpp" />
     <ClCompile Include="Run.cpp" />
     <ClCompile Include="SquareCell.h" />
     <ClCompile Include="SquareLoader.cpp" />

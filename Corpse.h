@@ -18,6 +18,7 @@ protected:
 		if (getNutritionalValue() < 0.1) suicide();
 	}
 	char * getName() { return "Corpse"; }
+	Creature * pick(CreaturePicker & picker, CreatureSorter & sorter) { return NULL; }
 public:
 	Corpse::Corpse(Creature * from) : Creature(1000, from->getNutritionalValue())
 	{

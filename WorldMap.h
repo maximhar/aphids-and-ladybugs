@@ -4,6 +4,7 @@
 #include <queue>
 #include <iostream>
 #include "CreatureCounter.h"
+#include "CreatureSorter.h"
 #include "CreatureIterator.h"
 #include "CreatureCellPair.h"
 class Cell;
@@ -12,6 +13,7 @@ class WorldMap
 private:
 	std::map<Cell *, std::set<Creature *> *> cellCreaturesMap;
 	std::map<Cell *, CreatureCounter> cellCountersMap;
+	std::map<Cell *, CreatureSorter *> cellSortersMap;
 	std::map<Creature *, Cell *> creatureCellMap;
 	std::queue<CreatureCellPair> additionQueue;
 	std::queue<Creature *> deletionQueue;
@@ -44,12 +46,18 @@ private:
 		return cellCountersMap.find(&cell)->second;
 	}
 
+	CreatureSorter & getCellSorter(Cell & cell)
+	{
+		return *cellSortersMap.find(&cell)->second;
+	}
+
 	void createCellIfNotExists(Cell & cell)
 	{
 		if (!cellExists(cell))
 		{
 			cellCreaturesMap.insert(std::make_pair(&cell, new std::set<Creature *>()));
 			cellCountersMap.insert(std::make_pair(&cell, CreatureCounter()));
+			cellSortersMap.insert(std::make_pair(&cell, new CreatureSorter()));
 		}
 	}
 
@@ -182,18 +190,22 @@ public:
 		auto set = cellCreaturesMap.find(&cell);
 		return new CreatureSetIterator(set->second, set->first);
 	}
-	const CreatureCounter getTotalsCounter()
+	CreatureCounter getTotalsCounter()
 	{
 		return totalsCounter;
 	}
-	const CreatureCounter getCounterForCell(Cell & cell)
+	CreatureCounter getCounterForCell(Cell & cell)
 	{
 		if (cellExists(cell)) return getCellCounter(cell);
 		else return CreatureCounter();
 	}
+	CreatureSorter & getSorterForCell(Cell & cell)
+	{
+		if (cellExists(cell)) return getCellSorter(cell);
+		else throw "Nonexistent cell";
+	}
 	bool changePending(Creature & creature)
 	{
-		//TODO: problem  here
 		return changePendingSet.count(&creature) > 0;
 	}
 	~WorldMap();

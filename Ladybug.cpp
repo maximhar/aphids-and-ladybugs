@@ -32,6 +32,11 @@ void Ladybug::interactWith(CreatureInteractor & creature) { creature.interact(*t
 
 double Ladybug::getMoveProbability() { return LadybugConfiguration::get().getMoveProbability(); }
 
+Creature * Ladybug::pick(CreaturePicker & picker, CreatureSorter & sorter)
+{
+	return picker.pick(sorter, *this);
+}
+
 void Ladybug::interact(Aphid & creature)
 {
 	if (getPhase() != Creature::KILLING) return;

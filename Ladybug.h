@@ -14,6 +14,7 @@ protected:
 	int getDirection();
 	double getMoveProbability();
 	char * getName() { return "Ladybug"; }
+	Creature * pick(CreaturePicker & picker, CreatureSorter & sorter);
 public:
 	void interactWith(CreatureInteractor & creature);
 	void interact(Aphid & creature);
