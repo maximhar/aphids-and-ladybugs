@@ -10,6 +10,7 @@ public:
 	virtual CreatureIterator & getContentsIterator(Cell& location) = 0;
 	virtual void destroyContentsIterator(CreatureIterator& iterator) = 0;
 	virtual CreatureCounter getCounter(Cell& location) = 0;
-	virtual CreatureSorter & getSorter(Cell& location) = 0;
+	virtual CreatureSorter & getDeletionSorter(Cell& location) = 0;
+	virtual CreatureSorter & getAdditionSorter(Cell& location) = 0;
 	virtual bool canChange(Creature & creature) = 0;
 };

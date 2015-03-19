@@ -15,7 +15,7 @@ void Creature::kill()
 {
 	Creature * current;
 	FoePicker picker;
-	CreatureSorter & sorter = handler->getSorter(*location);
+	CreatureSorter & sorter = handler->getDeletionSorter(*location);
 	while ((current = pick(picker, sorter)) != NULL)
 	{
 		if (current == this) continue;
@@ -28,7 +28,7 @@ void Creature::procreate()
 {
 	Creature * current;
 	MatePicker picker;
-	CreatureSorter & sorter = handler->getSorter(*location);
+	CreatureSorter & sorter = handler->getAdditionSorter(*location);
 	while ((current = pick(picker, sorter)) != NULL)
 	{
 		if (current == this) continue;
@@ -49,7 +49,8 @@ void Creature::survive()
 void Creature::suicide()
 {
 	getActionHandler().killed(*this, getLocation(), *this);
-	getActionHandler().reproduced(*this, getLocation(), *this, *(new Corpse(this)));
+	if(getNutritionalValue() > 0.1) 
+		getActionHandler().reproduced(*this, getLocation(), *this, *(new Corpse(this)));
 }
 
 void Creature::killCreature(Creature & creature)

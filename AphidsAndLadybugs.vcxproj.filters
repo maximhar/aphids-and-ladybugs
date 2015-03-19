@@ -137,5 +137,11 @@
     <ClInclude Include="MatePicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SorterManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatureFamily.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

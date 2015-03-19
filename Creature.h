@@ -34,6 +34,7 @@ protected:
 	ActionHandler & getActionHandler() { return *handler; }
 	Cell & getLocation() { return *location; }
 	void makeBaby(Creature & parent, Creature & baby);
+	double getFood() { return food; }
 	virtual void move();
 	virtual void kill();
 	virtual void procreate();
@@ -54,8 +55,8 @@ protected:
 	}
 	void giveBabyFood(Creature & otherParent, Creature & baby)
 	{
-		double food1 = food / 1.5;
-		double food2 = otherParent.food / 1.5;
+		double food1 = food / 2;
+		double food2 = otherParent.food / 2;
 		baby.food += food1;
 		baby.food += food2;
 		otherParent.food -= food2;

@@ -15,12 +15,6 @@ WorldMap::~WorldMap()
 		}
 		delete it->second;
 	}
-	auto setBegin = cellSortersMap.begin();
-	auto setEnd = cellSortersMap.end();
-	for (auto it = mapBegin; it != mapEnd; ++it)
-	{
-		delete it->second;
-	}
 }
 
 bool WorldMap::deleteCreature(Creature & creature)
@@ -28,7 +22,7 @@ bool WorldMap::deleteCreature(Creature & creature)
 	if (!creatureExists(creature)) return false;
 	deletionQueue.push(&creature);
 	//immense speedup, and doesn't affect actual creatures so it's ok
-	CreatureSorter& sorter = getCellSorter(*getCreatureCell(creature));
+	CreatureSorter& sorter = deletionSorters.getSorter(*getCreatureCell(creature));
 	addChangePending(creature);
 	sorter.setRemoving();
 	creature.interactWith(sorter);
@@ -75,11 +69,17 @@ void WorldMap::flushAdditionQueue()
 {
 	while (!additionQueue.empty())
 	{
-		CreatureCellPair pair = additionQueue.front();
+		CreatureFamily pair = additionQueue.front();
 		totalsCounter.setIncrementing();
-		pair.creature->interactWith(totalsCounter);
-		addCreatureToCell(*pair.creature, *pair.cell);
-		addCreatureToSet(*pair.creature, *pair.cell);
+		pair.child->interactWith(totalsCounter);
+		addCreatureToCell(*pair.child, *pair.location);
+		addCreatureToSet(*pair.child, *pair.location);
+		CreatureSorter & addsorter = additionSorters.getSorter(*pair.location);
+		addsorter.setAdding();
+		if (creatureExists(*pair.parent1))
+			pair.parent1->interactWith(addsorter);
+		if (creatureExists(*pair.parent2))
+			pair.parent2->interactWith(addsorter);
 		additionQueue.pop();
 	}
 }
@@ -90,20 +90,44 @@ void WorldMap::addCreatureToCell(Creature & creature, Cell & cell)
 	auto set = cellCreaturesMap.find(&cell)->second;
 	set->insert(&creature);
 	CreatureCounter & counter = getCellCounter(cell);
-	CreatureSorter & sorter = getCellSorter(cell);
+	CreatureSorter & delsorter = deletionSorters.getSorter(cell);
+	CreatureSorter & addsorter = additionSorters.getSorter(cell);
 	counter.setIncrementing();
-	sorter.setAdding();
+	delsorter.setAdding();
+	addsorter.setAdding();
 	creature.interactWith(counter);
-	creature.interactWith(sorter);
+	creature.interactWith(delsorter);
+	creature.interactWith(addsorter);
 }
 void WorldMap::deleteCreatureFromCell(Creature & creature, Cell & cell)
 {
 	auto set = cellCreaturesMap.find(&cell)->second;
 	set->erase(&creature);
 	CreatureCounter & counter = getCellCounter(cell);
-	CreatureSorter & sorter = getCellSorter(cell);
+	CreatureSorter & delsorter = deletionSorters.getSorter(cell);
+	CreatureSorter & addsorter = additionSorters.getSorter(cell);
 	counter.setDecrementing();
-	sorter.setRemoving();
+	delsorter.setRemoving();
+	addsorter.setRemoving();
 	creature.interactWith(counter);
-	creature.interactWith(sorter);
+	creature.interactWith(delsorter);
+	creature.interactWith(addsorter);
+}
+
+void WorldMap::addCreature(Creature & creature, Creature & parent1, Creature & parent2, Cell & cell)
+{
+	additionQueue.push(CreatureFamily(&cell, &creature, &parent1, &parent2));
+	CreatureSorter & addsorter = additionSorters.getSorter(cell);
+	addsorter.setRemoving();
+	parent1.interactWith(addsorter);
+	parent2.interactWith(addsorter);
+}
+void WorldMap::addCreature(Creature & creature, Cell & cell)
+{
+	additionQueue.push(CreatureFamily(&cell, &creature, &creature, &creature));
+}
+void WorldMap::moveCreature(Creature & creature, Cell & newCell)
+{
+	movementQueue.push(CreatureCellPair(&newCell, &creature));
+	addChangePending(creature);
 }

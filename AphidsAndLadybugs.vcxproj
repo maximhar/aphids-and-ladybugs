@@ -74,6 +74,7 @@
     <ClInclude Include="CreatureConfiguration.h" />
     <ClInclude Include="CreatureCounter.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="CreatureFamily.h" />
     <ClInclude Include="CreatureInteractor.h" />
     <ClInclude Include="CreatureIterator.h" />
     <ClInclude Include="CreaturePicker.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="Manager.h" />
     <ClInclude Include="MatePicker.h" />
     <ClInclude Include="Printer.h" />
+    <ClInclude Include="SorterManager.h" />
     <ClInclude Include="SquareLoader.h" />
     <ClInclude Include="SquarePrinter.h" />
     <ClInclude Include="SquareWorld.h" />

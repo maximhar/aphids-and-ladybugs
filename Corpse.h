@@ -6,7 +6,7 @@ class Corpse :
 {
 protected:
 	void suicide() { getActionHandler().killed(*this, getLocation(), *this);  }
-	double eat(double initial) { return initial * 0.95; }
+	double eat(double initial) { return initial * 0.90; }
 	double getDefaultNutritionalValue() { return 0; }
 	void makeInteractWith(Creature * creature) { }
 	int getDirection() { return 0; }

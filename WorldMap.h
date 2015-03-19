@@ -1,5 +1,6 @@
 #pragma once
-#include <unordered_map>
+#include <hash_map>
+#include <hash_set>
 #include <set>
 #include <queue>
 #include <iostream>
@@ -7,18 +8,21 @@
 #include "CreatureSorter.h"
 #include "CreatureIterator.h"
 #include "CreatureCellPair.h"
+#include "SorterManager.h"
+#include "CreatureFamily.h"
 class Cell;
 class WorldMap
 {
 private:
-	std::unordered_map<Cell *, std::set<Creature *> *> cellCreaturesMap;
-	std::unordered_map<Cell *, CreatureCounter> cellCountersMap;
-	std::unordered_map<Cell *, CreatureSorter *> cellSortersMap;
-	std::unordered_map<Creature *, Cell *> creatureCellMap;
-	std::queue<CreatureCellPair> additionQueue;
+	std::hash_map<Cell *, std::set<Creature *> *> cellCreaturesMap;
+	std::hash_map<Cell *, CreatureCounter> cellCountersMap;
+	std::hash_map<Creature *, Cell *> creatureCellMap;
+	std::queue<CreatureFamily> additionQueue;
 	std::queue<Creature *> deletionQueue;
 	std::queue<CreatureCellPair> movementQueue;
-	std::set<Creature *> changePendingSet;
+	std::hash_set<Creature *> changePendingSet;
+	SorterManager additionSorters;
+	SorterManager deletionSorters;
 	CreatureCounter totalsCounter;
 	void addChangePending(Creature & creature)
 	{
@@ -46,18 +50,12 @@ private:
 		return cellCountersMap.find(&cell)->second;
 	}
 
-	CreatureSorter & getCellSorter(Cell & cell)
-	{
-		return *cellSortersMap.find(&cell)->second;
-	}
-
 	void createCellIfNotExists(Cell & cell)
 	{
 		if (!cellExists(cell))
 		{
 			cellCreaturesMap.insert(std::make_pair(&cell, new std::set<Creature *>()));
 			cellCountersMap.insert(std::make_pair(&cell, CreatureCounter()));
-			cellSortersMap.insert(std::make_pair(&cell, new CreatureSorter()));
 		}
 	}
 
@@ -93,11 +91,11 @@ private:
 	class CreatureMapIterator : public CreatureIterator
 	{
 	private:
-		std::unordered_map<Creature *, Cell *>::const_iterator begin;
-		std::unordered_map<Creature *, Cell *>::const_iterator end;
-		std::unordered_map<Creature *, Cell *>::const_iterator current;
+		std::hash_map<Creature *, Cell *>::const_iterator begin;
+		std::hash_map<Creature *, Cell *>::const_iterator end;
+		std::hash_map<Creature *, Cell *>::const_iterator current;
 	public:
-		CreatureMapIterator(std::unordered_map<Creature *, Cell *> * creatures)
+		CreatureMapIterator(std::hash_map<Creature *, Cell *> * creatures)
 			: begin(creatures->begin()), end(creatures->end())
 		{
 			current = begin;
@@ -160,20 +158,14 @@ private:
 
 public:
 	WorldMap() :
-		cellCreaturesMap(std::unordered_map<Cell *, std::set<Creature *> *>()),
-		creatureCellMap(std::unordered_map<Creature *, Cell *>())
+		cellCreaturesMap(std::hash_map<Cell *, std::set<Creature *> *>()),
+		creatureCellMap(std::hash_map<Creature *, Cell *>())
 	{
 	}
 	bool deleteCreature(Creature & creature);
-	void addCreature(Creature & creature, Cell & cell)
-	{
-		additionQueue.push(CreatureCellPair(&cell, &creature));
-	}
-	void moveCreature(Creature & creature, Cell & newCell)
-	{
-		movementQueue.push(CreatureCellPair(&newCell, &creature));
-		addChangePending(creature);
-	}
+	void addCreature(Creature & creature, Creature & parent1, Creature & parent2, Cell & cell);
+	void addCreature(Creature & creature, Cell & cell);
+	void moveCreature(Creature & creature, Cell & newCell);
 	void flush()
 	{
 		flushMovementQueue();
@@ -199,9 +191,14 @@ public:
 		if (cellExists(cell)) return getCellCounter(cell);
 		else return CreatureCounter();
 	}
-	CreatureSorter & getSorterForCell(Cell & cell)
+	CreatureSorter & getDeletionSorterForCell(Cell & cell)
 	{
-		if (cellExists(cell)) return getCellSorter(cell);
+		if (cellExists(cell)) return deletionSorters.getSorter(cell);
+		else throw "Nonexistent cell";
+	}
+	CreatureSorter & getAdditionSorterForCell(Cell & cell)
+	{
+		if (cellExists(cell)) return additionSorters.getSorter(cell);
 		else throw "Nonexistent cell";
 	}
 	bool changePending(Creature & creature)

@@ -1,21 +1,22 @@
-﻿Build started 18/03/2015 20:10:15.
-     1>Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19/03/2015 00:11:02.
+     1>Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _HAS_ITERATOR_DEBUGGING=0 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp Cell.cpp Creature.cpp FoePicker.cpp Ladybug.cpp MatePicker.cpp Run.cpp SquareCell.h SquareLoader.cpp SquarePrinter.cpp SquareWorld.cpp WorldMap.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _HAS_ITERATOR_DEBUGGING=0 /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Aphid.cpp AphidConfiguration.cpp Cell.cpp Creature.cpp FoePicker.cpp Ladybug.cpp LadybugConfiguration.cpp Manager.cpp MatePicker.cpp Run.cpp SquareCell.h SquareLoader.cpp SquarePrinter.cpp SquareWorld.cpp WorldMap.cpp
          WorldMap.cpp
-         Generating Code...
-         Compiling...
          SquareWorld.cpp
          SquarePrinter.cpp
          SquareLoader.cpp
          SquareCell.h
          Run.cpp
          MatePicker.cpp
+         Manager.cpp
+         LadybugConfiguration.cpp
          Ladybug.cpp
          FoePicker.cpp
          Creature.cpp
      1>c:\users\maximhar\documents\visual studio 2013\projects\aphidsandladybugs\aphidsandladybugs\creature.cpp(7): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
          Cell.cpp
+         AphidConfiguration.cpp
          Aphid.cpp
          Generating Code...
        Link:
@@ -35,8 +36,8 @@
          Debug\SquareWorld.obj
          Debug\WorldMap.obj
          AphidsAndLadybugs.vcxproj -> C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\Debug\AphidsAndLadybugs.exe
-     1>Done Building Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\maximhar\documents\visual studio 2013\Projects\AphidsAndLadybugs\AphidsAndLadybugs\AphidsAndLadybugs.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:09.10
+Time Elapsed 00:00:10.13

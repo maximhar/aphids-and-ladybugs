@@ -1,5 +1,5 @@
 #pragma once
-#include <unordered_set>
+#include <hash_set>
 #include "CreatureInteractor.h"
 class Creature;
 class Aphid;
@@ -8,12 +8,12 @@ class Corpse;
 class CreatureSorter : public CreatureInteractor
 {
 private:
-	std::unordered_set<Aphid *> aphids;
-	std::unordered_set<Ladybug *> ladybugs;
-	std::unordered_set<Corpse *> corpses;
-	std::unordered_set<Aphid *>::iterator itAphids;
-	std::unordered_set<Ladybug *>::iterator itLadybugs;
-	std::unordered_set<Corpse *>::iterator itCorpses;
+	std::hash_set<Aphid *> aphids;
+	std::hash_set<Ladybug *> ladybugs;
+	std::hash_set<Corpse *> corpses;
+	std::hash_set<Aphid *>::iterator itAphids;
+	std::hash_set<Ladybug *>::iterator itLadybugs;
+	std::hash_set<Corpse *>::iterator itCorpses;
 	bool adding;
 public:
 	CreatureSorter() : adding(true)
