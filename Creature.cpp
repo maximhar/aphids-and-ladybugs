@@ -14,9 +14,8 @@ void Creature::move()
 void Creature::kill()
 {
 	Creature * current;
-	FoePicker picker;
 	CreatureSorter & sorter = handler->getDeletionSorter(*location);
-	while ((current = pick(picker, sorter)) != NULL)
+	while ((current = pick(foePicker, sorter)) != NULL)
 	{
 		if (current == this) continue;
 		if (!handler->canChange(*current)) continue;
@@ -27,9 +26,8 @@ void Creature::kill()
 void Creature::procreate()
 {
 	Creature * current;
-	MatePicker picker;
 	CreatureSorter & sorter = handler->getAdditionSorter(*location);
-	while ((current = pick(picker, sorter)) != NULL)
+	while ((current = pick(matePicker, sorter)) != NULL)
 	{
 		if (current == this) continue;
 		if (!handler->canChange(*current)) continue;

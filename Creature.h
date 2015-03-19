@@ -28,6 +28,8 @@ private:
 	bool hasKilled;
 	int lifespan;
 	double food;
+	FoePicker foePicker;
+	MatePicker matePicker;
 protected:
 	enum Phase { MOVING, KILLING, PROCREATING, SURVIVING };
 	Phase getPhase() { return phase; }

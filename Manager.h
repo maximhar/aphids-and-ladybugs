@@ -19,6 +19,7 @@
 #include "AphidConfiguration.h"
 #include "LadybugConfiguration.h"
 #include "SorterManager.h"
+#include "CreatureIterator.h"
 #include <time.h>
 class Manager : public ActionHandler
 {
@@ -76,13 +77,7 @@ public:
 	{
 		turn++;
 		CreatureCounter counter = worldMap->getTotalsCounter();
-		auto it = worldMap->allCreatures();
-		double totalFood = 0;
-		while (it->hasNext())
-		{
-			totalFood += it->next().creature->getNutritionalValue();
-		}
-		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << ", Corpses: " << counter.getCorpses() << ", Food: " << std::showpoint << std::fixed << std::setw(2) << totalFood << std::endl;
+		std::cout << "Aphids: " << counter.getAphids() << ", Ladybugs: " << counter.getLadybugs() << ", Corpses: " << counter.getCorpses() << std::endl;
 		std::cout << "Turn: " << turn << std::endl;
 		//os << counter.getAphids() << "," << counter.getLadybugs() << "," << counter.getCorpses() << "," << std::showpoint << std::fixed << std::setw(2) << totalFood / 100 << std::endl;
 		os << counter.getAphids() + counter.getLadybugs() + counter.getCorpses() << "," << (((float)lastt / CLOCKS_PER_SEC) * 1000) << std::endl;
@@ -139,16 +134,6 @@ public:
 	void reproduced(Creature& self, Cell& location, Creature& partner, Creature& offspring)
 	{
 		worldMap->addCreature(offspring, self, partner, location);
-	}
-
-	void destroyContentsIterator(CreatureIterator & iter)
-	{
-		delete &iter;
-	}
-
-	CreatureIterator & getContentsIterator(Cell & loc)
-	{
-		return *worldMap->creaturesInCell(loc);
 	}
 
 	CreatureCounter getCounter(Cell & loc)

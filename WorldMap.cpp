@@ -21,12 +21,30 @@ bool WorldMap::deleteCreature(Creature & creature)
 {
 	if (!creatureExists(creature)) return false;
 	deletionQueue.push(&creature);
-	//immense speedup, and doesn't affect actual creatures so it's ok
-	CreatureSorter& sorter = deletionSorters.getSorter(*getCreatureCell(creature));
 	addChangePending(creature);
+	CreatureSorter& sorter = deletionSorters.getSorter(*getCreatureCell(creature));
 	sorter.setRemoving();
 	creature.interactWith(sorter);
 	return true;
+}
+
+
+void WorldMap::addCreature(Creature & creature, Creature & parent1, Creature & parent2, Cell & cell)
+{
+	additionQueue.push(CreatureFamily(&cell, &creature, &parent1, &parent2));
+	CreatureSorter & addsorter = additionSorters.getSorter(cell);
+	addsorter.setRemoving();
+	parent1.interactWith(addsorter);
+	parent2.interactWith(addsorter);
+}
+void WorldMap::addCreature(Creature & creature, Cell & cell)
+{
+	additionQueue.push(CreatureFamily(&cell, &creature, &creature, &creature));
+}
+void WorldMap::moveCreature(Creature & creature, Cell & newCell)
+{
+	movementQueue.push(CreatureCellPair(&newCell, &creature));
+	addChangePending(creature);
 }
 
 void WorldMap::flushDeletionQueue()
@@ -112,22 +130,4 @@ void WorldMap::deleteCreatureFromCell(Creature & creature, Cell & cell)
 	creature.interactWith(counter);
 	creature.interactWith(delsorter);
 	creature.interactWith(addsorter);
-}
-
-void WorldMap::addCreature(Creature & creature, Creature & parent1, Creature & parent2, Cell & cell)
-{
-	additionQueue.push(CreatureFamily(&cell, &creature, &parent1, &parent2));
-	CreatureSorter & addsorter = additionSorters.getSorter(cell);
-	addsorter.setRemoving();
-	parent1.interactWith(addsorter);
-	parent2.interactWith(addsorter);
-}
-void WorldMap::addCreature(Creature & creature, Cell & cell)
-{
-	additionQueue.push(CreatureFamily(&cell, &creature, &creature, &creature));
-}
-void WorldMap::moveCreature(Creature & creature, Cell & newCell)
-{
-	movementQueue.push(CreatureCellPair(&newCell, &creature));
-	addChangePending(creature);
 }
